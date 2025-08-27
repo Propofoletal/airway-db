@@ -1,22 +1,22 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 
-const sgas = ref([])
+const sads = ref([])  // Supraglottic Airway Devices
 const etts = ref([])
 
 const selectedETTSize = ref(null)   // ETT size by internal diameter (ID)
 const selectedETTModel = ref(null)  // specific brand/model (drives OD)
 const useWorstCase = ref(true)      // use largest OD among models for that size (conservative)
 
-const selectedSGA = ref(null)
+const selectedSAD = ref(null)
 const clearance = ref(0.5)          // mm
 
 onMounted(async () => {
-  const [sgasRes, ettsRes] = await Promise.all([
-    fetch('/sgas.json'),
+  const [sadsRes, ettsRes] = await Promise.all([
+    fetch('/sads.json'),
     fetch('/etts.json'),
   ])
-  sgas.value = await sgasRes.json()
+  sads.value = await sadsRes.json()
   etts.value = await ettsRes.json()
 })
 
@@ -64,31 +64,31 @@ const ettContextText = computed(() => {
     const m = selectedETTModel.value
     const cuff = Number(m.cuff_mm)
     const cuffTxt = !Number.isNaN(cuff) ? `; cuff ${cuff.toFixed(1)} mm` : ''
-    return `${m.name} — size ${Number(m.internal_mm).toFixed(1)}; OD ${Number(m.external_mm).toFixed(2)} mm${cuffTxt}`
+    const man = m.manufacturer ? ` [${m.manufacturer}]` : ''
+    return `${m.name}${man} — size ${Number(m.internal_mm).toFixed(1)}; OD ${Number(m.external_mm).toFixed(2)} mm${cuffTxt}`
   }
   return ''
 })
 
 /** Compatibility verdict */
 const verdict = computed(() => {
-  if (!selectedSGA.value || effectiveETT_OD.value == null) return null
+  if (!selectedSAD.value || effectiveETT_OD.value == null) return null
 
-  const sgaID = Number(selectedSGA.value.internal_mm)   // SGA internal diameter
+  const sadID = Number(selectedSAD.value.internal_mm)   // SAD internal diameter
   const ettOD = Number(effectiveETT_OD.value)           // ETT external diameter
   const need = Number(clearance.value)
 
-  if (Number.isNaN(sgaID) || Number.isNaN(ettOD)) {
+  if (Number.isNaN(sadID) || Number.isNaN(ettOD)) {
     return { state: 'unknown', msg: 'Missing diameter data.' }
   }
 
-  const gap = sgaID - ettOD
+  const gap = sadID - ettOD
   if (gap < 0) {
-    return { state: 'no-fit', msg: `ETT OD ${ettOD.toFixed(2)} > SGA ID ${sgaID.toFixed(2)}` }
+    return { state: 'no-fit', msg: `ETT OD ${ettOD.toFixed(2)} > SAD ID ${sadID.toFixed(2)}` }
   }
   if (gap < need) {
     return { state: 'no-fit', msg: `Needs ≥ ${need.toFixed(2)} mm clearance; gap = ${gap.toFixed(2)} mm` }
   }
-  // “tight” if within +0.5 mm beyond the clearance
   if (gap <= need + 0.5) {
     return { state: 'tight', msg: `Gap ${gap.toFixed(2)} mm (tight margin)` }
   }
@@ -102,8 +102,8 @@ function stateLabel(s) {
 }
 
 const mathsLine = computed(() => {
-  if (!selectedSGA.value || effectiveETT_OD.value == null) return ''
-  const id = Number(selectedSGA.value.internal_mm)
+  if (!selectedSAD.value || effectiveETT_OD.value == null) return ''
+  const id = Number(selectedSAD.value.internal_mm)
   const od = Number(effectiveETT_OD.value)
   const need = Number(clearance.value)
   return `${od.toFixed(2)} + ${need.toFixed(2)} ≤ ${id.toFixed(2)}`
@@ -112,7 +112,7 @@ const mathsLine = computed(() => {
 
 <template>
   <main class="container">
-    <h1>ETT ↔︎ SGA Compatibility</h1>
+    <h1>ETT ↔︎ SAD Compatibility</h1>
 
     <section class="grid">
       <!-- ETT SIZE -->
@@ -131,7 +131,7 @@ const mathsLine = computed(() => {
         <select v-model="selectedETTModel" :disabled="useWorstCase || !modelsForSelectedSize.length">
           <option :value="null">— choose a model —</option>
           <option v-for="m in modelsForSelectedSize" :key="m.name + m.external_mm" :value="m">
-            {{ m.name }} — OD {{ Number(m.external_mm).toFixed(2) }} mm
+            {{ m.name }} <span v-if="m.manufacturer">— {{ m.manufacturer }}</span> — OD {{ Number(m.external_mm).toFixed(2) }} mm
           </option>
         </select>
         <label class="row" style="margin-top:.4rem;">
@@ -140,13 +140,13 @@ const mathsLine = computed(() => {
         </label>
       </div>
 
-      <!-- SGA -->
+      <!-- SAD -->
       <div class="field">
-        <label>SGA</label>
-        <select v-model="selectedSGA">
-          <option :value="null">— choose an SGA —</option>
-          <option v-for="s in sgas" :key="s.name + s.internal_mm" :value="s">
-            {{ s.name }} — ID {{ Number(s.internal_mm).toFixed(2) }} mm
+        <label>SAD (Supraglottic Airway Device)</label>
+        <select v-model="selectedSAD">
+          <option :value="null">— choose a SAD —</option>
+          <option v-for="s in sads" :key="s.name + s.internal_mm" :value="s">
+            {{ s.name }} <span v-if="s.manufacturer">— {{ s.manufacturer }}</span> — ID {{ Number(s.internal_mm).toFixed(2) }} mm
           </option>
         </select>
       </div>
@@ -160,9 +160,9 @@ const mathsLine = computed(() => {
     </section>
 
     <!-- Context -->
-    <section v-if="selectedETTSize || selectedSGA" class="context">
+    <section v-if="selectedETTSize || selectedSAD" class="context">
       <p v-if="ettContextText"><strong>ETT:</strong> {{ ettContextText }}</p>
-      <p v-if="selectedSGA"><strong>SGA:</strong> {{ selectedSGA.name }} — ID {{ Number(selectedSGA.internal_mm).toFixed(2) }} mm</p>
+      <p v-if="selectedSAD"><strong>SAD:</strong> {{ selectedSAD.name }} <span v-if="selectedSAD.manufacturer">— {{ selectedSAD.manufacturer }}</span> — ID {{ Number(selectedSAD.internal_mm).toFixed(2) }} mm</p>
     </section>
 
     <!-- Verdict -->
@@ -180,7 +180,7 @@ const mathsLine = computed(() => {
       <p class="maths">{{ mathsLine }}</p>
 
       <p v-if="!useWorstCase && selectedETTModel?.notes" class="notes">ETT notes: {{ selectedETTModel.notes }}</p>
-      <p v-if="selectedSGA?.notes" class="notes">SGA notes: {{ selectedSGA.notes }}</p>
+      <p v-if="selectedSAD?.notes" class="notes">SAD notes: {{ selectedSAD.notes }}</p>
     </section>
   </main>
 </template>

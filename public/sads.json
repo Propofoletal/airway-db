@@ -1,44 +1,44 @@
 [
   {
     "name":"i-gel, supraglottic airway, size 1.0, neonate, 2-5kg ",
-    "internal_mm":5.4,
     "manufacturer":"intersurgcial ",
+    "internal_mm":5.4,
     "notes":null
   },
   {
     "name":"i-gel, supraglottic airway, size 1.5, infant, 5-12kg ",
-    "internal_mm":6.8,
     "manufacturer":"intersurgcial ",
+    "internal_mm":6.8,
     "notes":null
   },
   {
     "name":" i-gel, supraglottic airway, size 2.0, small paediatric, 10-25kg",
-    "internal_mm":8.7,
     "manufacturer":"intersurgcial ",
+    "internal_mm":8.7,
     "notes":null
   },
   {
     "name":"i-gel, supraglottic airway, size 2.5, large paediatric, 25-35kg",
-    "internal_mm":10.1,
     "manufacturer":"intersurgcial ",
+    "internal_mm":10.1,
     "notes":null
   },
   {
     "name":"i-gel, supraglottic airway, size 3, small adult, 30-60kg",
-    "internal_mm":11.1,
     "manufacturer":"intersurgcial ",
+    "internal_mm":11.1,
     "notes":null
   },
   {
     "name":"i-gel, supraglottic airway, size 4, medium adult, 50-90kg",
-    "internal_mm":12.3,
     "manufacturer":"intersurgcial ",
+    "internal_mm":12.3,
     "notes":null
   },
   {
     "name":"i-gel\u00ae, supraglottic airway, size 5, large adult, 90+kg\u00a0",
-    "internal_mm":13.1,
     "manufacturer":"intersurgcial ",
+    "internal_mm":13.1,
     "notes":null
   }
 ]
