@@ -343,7 +343,7 @@ h1 { font-size: 1.6rem; margin-bottom: 0.75rem; }
 h2 { margin: .5rem 0; font-size: 1.2rem; }
 h3 { margin: .5rem 0; font-size: 1.05rem; }
 
-.mode { display: flex; gap: 1rem; margin-bottom: .75rem; }
+.mode { display: flex; justify-content: center; gap: 1rem; margin: 1rem 0; margin-bottom: .75rem; }
 .mode label { display: flex; align-items: center; gap: .4rem; font-weight: 600; }
 
 .field { margin-bottom: 0.8rem; }
