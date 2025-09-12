@@ -1,27 +1,25 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 
-/* -------------------------
-   Data & state
--------------------------- */
+/* Data */
 const sads = ref([])   // Supraglottic Airway Devices
-const etts = ref([])   // Endotracheal tubes
+const etts = ref([])   // Endotracheal Tubes
 
-// Mode: 'sadToEtt' (default) or 'ettToSad'
+/* Mode: SAD→ETT (default) or ETT→SAD */
 const flow = ref('sadToEtt')
 
-// Shared inputs
+/* Shared */
 const clearance = ref(0.5) // mm
 
-/* --- SAD → ETT selections --- */
-const selectedSAD = ref(null)            // choose SAD first
-const selectedETTSize = ref(null)        // then size
-const selectedETTModel = ref(null)       // then model (optional)
+/* SAD → ETT selections */
+const selectedSAD = ref(null)
+const selectedETTSize = ref(null)
+const selectedETTModel = ref(null)
 
-/* --- ETT → SAD selections --- */
-const ettSize_E2S = ref(null)            // ETT size (ID)
-const ettModel_E2S = ref(null)           // ETT model (brand) optional
-const useWorstCase_E2S = ref(true)       // conservative worst-case OD for size
+/* ETT → SAD selections */
+const ettSize_E2S = ref(null)
+const ettModel_E2S = ref(null)
+const useWorstCase_E2S = ref(true)
 
 onMounted(async () => {
   const [sadsRes, ettsRes] = await Promise.all([
@@ -32,11 +30,7 @@ onMounted(async () => {
   etts.value = await ettsRes.json()
 })
 
-/* -------------------------
-   Helpers & computed
--------------------------- */
-
-// Unique ETT sizes (IDs) available
+/* Helpers */
 const ettSizes = computed(() => {
   const sizes = new Set()
   for (const e of etts.value) {
@@ -46,7 +40,6 @@ const ettSizes = computed(() => {
   return Array.from(sizes).sort((a,b)=>a-b)
 })
 
-// Models for a given ETT size
 function modelsForSize(size) {
   const s = Number(size)
   return etts.value
@@ -54,7 +47,6 @@ function modelsForSize(size) {
     .sort((a,b)=>Number(a.external_mm) - Number(b.external_mm))
 }
 
-// Verdict core
 function verdictFrom(sadID, ettOD, need) {
   const gap = sadID - ettOD
   if (gap < 0) return { state: 'no-fit', gap }
@@ -67,17 +59,12 @@ function labelState(s) {
   return s === 'fit' ? 'Fits' : s === 'tight' ? 'Tight' : s === 'no-fit' ? 'Doesn’t fit' : 'Unknown'
 }
 
-/* -------------------------
-   SAD → ETT flow
--------------------------- */
-
-// Size-level recommendations for chosen SAD (uses worst-case OD per size)
+/* SAD → ETT flow */
 const sizeRecommendations = computed(() => {
   if (!selectedSAD.value) return []
   const sadID = Number(selectedSAD.value.internal_mm)
   const need = Number(clearance.value)
   if (Number.isNaN(sadID)) return []
-
   return ettSizes.value.map(size => {
     const models = modelsForSize(size)
     if (!models.length) return { size, state: 'unknown', worstOD: null, gap: null }
@@ -90,7 +77,6 @@ const sizeRecommendations = computed(() => {
   })
 })
 
-// Model-level recommendations once a size is chosen
 const modelRecommendations = computed(() => {
   if (!selectedSAD.value || selectedETTSize.value == null) return []
   const sadID = Number(selectedSAD.value.internal_mm)
@@ -106,7 +92,7 @@ const modelRecommendations = computed(() => {
   })
 })
 
-// Size-only estimate (neutral, worst-case OD)
+/* NEW: split neutral size estimate vs coloured model verdict */
 const sizeEstimate_S2E = computed(() => {
   if (!selectedSAD.value || selectedETTSize.value == null) return null
   const sadID = Number(selectedSAD.value.internal_mm)
@@ -118,7 +104,6 @@ const sizeEstimate_S2E = computed(() => {
   return { ...v, sadID, od: worstOD, need }
 })
 
-// Model-specific verdict (colour this one)
 const modelVerdict_S2E = computed(() => {
   if (!selectedSAD.value || !selectedETTModel.value) return null
   const sadID = Number(selectedSAD.value.internal_mm)
@@ -129,36 +114,25 @@ const modelVerdict_S2E = computed(() => {
   return { ...v, sadID, od, need }
 })
 
-/* -------------------------
-   ETT → SAD flow
--------------------------- */
-
-// Models for the chosen size (E2S)
+/* ETT → SAD flow */
 const models_E2S = computed(() => {
   if (ettSize_E2S.value == null) return []
   return modelsForSize(ettSize_E2S.value)
 })
 
-// Effective OD in ETT→SAD mode (worst-case or chosen model)
 const effectiveETT_OD_E2S = computed(() => {
   if (ettSize_E2S.value == null) return null
   const models = models_E2S.value
   if (!models.length) return null
-  if (useWorstCase_E2S.value) {
-    return Math.max(...models.map(m => Number(m.external_mm)))
-  }
-  if (ettModel_E2S.value) {
-    return Number(ettModel_E2S.value.external_mm)
-  }
+  if (useWorstCase_E2S.value) return Math.max(...models.map(m => Number(m.external_mm)))
+  if (ettModel_E2S.value) return Number(ettModel_E2S.value.external_mm)
   return null
 })
 
-// SAD verdicts for the chosen ETT (for listing all SADs)
 const sadRecommendations_E2S = computed(() => {
   const od = Number(effectiveETT_OD_E2S.value)
   const need = Number(clearance.value)
   if (Number.isNaN(od)) return []
-
   return sads.value
     .map(s => {
       const sadID = Number(s.internal_mm)
@@ -172,7 +146,6 @@ const sadRecommendations_E2S = computed(() => {
     })
 })
 
-// Final maths line for ETT→SAD (if there’s an effective OD)
 const mathsLine_E2S = computed(() => {
   const od = Number(effectiveETT_OD_E2S.value)
   const need = Number(clearance.value)
@@ -183,29 +156,31 @@ const mathsLine_E2S = computed(() => {
 
 <template>
   <main class="container">
-    <h1>Airway Compatibility App</h1>
-    <p class="disclaimer">
-  ⚠️ <br>This app is intended for estimation only.<br> Data are based on information provided by manufacturers.<br>
-  Always check actual device specifications and confirm compatibility before clinical use.
-</p>
+    <h1>Airway Compatibility</h1>
 
-    <!-- Mode switch -->
+    <!-- Disclaimer -->
+    <p class="disclaimer">
+      ⚠️ This app is intended for estimation only.
+      Data are based on information provided by manufacturers.
+      Always check device specifications and confirm compatibility.
+      Always check actual device fit before clinical use.
+    </p>
+
+    <!-- Mode switch (centred) -->
     <div class="mode">
       <label><input type="radio" value="sadToEtt" v-model="flow"> SAD → ETT</label>
       <label><input type="radio" value="ettToSad" v-model="flow"> ETT → SAD</label>
     </div>
 
-    <!-- Shared control -->
+    <!-- Shared clearance -->
     <div class="field">
       <label>Clearance (mm): {{ clearance.toFixed(2) }}</label>
       <input type="range" min="0" max="1.5" step="0.1" v-model.number="clearance" />
       <small>Default 0.5 mm; adjust per device/preference.</small>
     </div>
 
-    <!-- ===========================
-         MODE: SAD → ETT
-         =========================== -->
-  
+    <!-- ===== MODE: SAD → ETT ===== -->
+    <section v-if="flow==='sadToEtt'">
       <!-- 1) Choose SAD -->
       <div class="field">
         <label>SAD (Supraglottic Airway Device)</label>
@@ -220,13 +195,15 @@ const mathsLine_E2S = computed(() => {
 
       <!-- Context -->
       <div v-if="selectedSAD" class="context">
-        <p><strong>Selected SAD:</strong> {{ selectedSAD.name }}
+        <p>
+          <strong>Selected SAD:</strong>
+          {{ selectedSAD.name }}
           <span v-if="selectedSAD.manufacturer">— {{ selectedSAD.manufacturer }}</span>
           — ID {{ Number(selectedSAD.internal_mm).toFixed(2) }} mm
         </p>
       </div>
 
-      <!-- 2) Size recommendations (worst-case OD) -->
+      <!-- 2) Size recommendations -->
       <div v-if="selectedSAD" class="sizes">
         <h2>Recommended ETT sizes (by ID)</h2>
         <div class="chips">
@@ -235,16 +212,16 @@ const mathsLine_E2S = computed(() => {
             :key="rec.size"
             class="chip"
             :class="rec.state"
-            @click="selectedETTSize = rec.size; selectedETTModel = null;"
+            @click="selectedETTSize = rec.size; selectedETTModel = null"
             :title="rec.worstOD ? `Worst-case OD ${rec.worstOD.toFixed(2)} mm` : ''"
           >
             {{ rec.size.toFixed(1) }}
           </button>
         </div>
-        <small><strong>General estimate:</strong>Colours denote <em>worst-case outer diameter(OD)</em> for each ETT size across brands.<br> Select ETT ID to review difernt models.</small>
+        <small>Colours use <em>worst-case OD</em> for each size across brands.</small>
       </div>
 
-      <!-- 3) Model list within a size -->
+      <!-- 3) Model list within selected size -->
       <div v-if="selectedSAD && selectedETTSize != null" class="models">
         <h3>Models for size {{ Number(selectedETTSize).toFixed(1) }}</h3>
         <div class="list">
@@ -269,65 +246,46 @@ const mathsLine_E2S = computed(() => {
         </div>
       </div>
 
-<!-- ===== SAD → ETT: Final sections ===== -->
+      <!-- 4) Neutral size estimate (no model picked) -->
+      <section v-if="sizeEstimate_S2E && !modelVerdict_S2E" class="estimate">
+        <div class="badge neutral">Estimate (size worst-case)</div>
+        <p class="details">Using worst-case OD for size {{ Number(selectedETTSize).toFixed(1) }}:</p>
+        <h4 class="calc-heading">Calculation</h4>
+        <p class="calc-line">
+          (ETT OD {{ sizeEstimate_S2E.od.toFixed(2) }} mm) +
+          (Clearance {{ sizeEstimate_S2E.need.toFixed(2) }} mm) ≤
+          (SAD ID {{ sizeEstimate_S2E.sadID.toFixed(2) }} mm)
+        </p>
+        <p class="hint">Select an ETT model above for a definitive verdict.</p>
+      </section>
 
-<!-- Show a neutral estimate when only SIZE is chosen (no model picked yet) -->
-<section
-  v-if="sizeEstimate_S2E && !modelVerdict_S2E"
-  class="estimate"
->
-  <div class="badge neutral">Estimate (size worst-case)</div>
-  <p class="details">
-    Using worst-case OD for size {{ Number(selectedETTSize).toFixed(1) }}:
-  </p>
+      <!-- 5) Coloured model verdict -->
+      <section
+        v-if="modelVerdict_S2E"
+        class="result"
+        :class="{
+          fit: modelVerdict_S2E.state==='fit',
+          tight: modelVerdict_S2E.state==='tight',
+          nofit: modelVerdict_S2E.state==='no-fit'
+        }"
+      >
+        <div class="badge big" :data-state="modelVerdict_S2E.state">
+          {{ labelState(modelVerdict_S2E.state) }}
+        </div>
+        <p class="details">Using selected model OD:</p>
+        <h4 class="calc-heading">Calculation</h4>
+        <p class="calc-line">
+          (ETT OD {{ modelVerdict_S2E.od.toFixed(2) }} mm) +
+          (Clearance {{ modelVerdict_S2E.need.toFixed(2) }} mm) ≤
+          (SAD ID {{ modelVerdict_S2E.sadID.toFixed(2) }} mm)
+        </p>
+        <p v-if="selectedETTModel?.notes" class="details">ETT notes: {{ selectedETTModel.notes }}</p>
+        <p v-if="selectedSAD?.notes" class="details">SAD notes: {{ selectedSAD.notes }}</p>
+      </section>
+    </section>
 
-  <h4 class="calc-heading">Calculation</h4>
-  <p class="calc-line">
-    (ETT OD {{ sizeEstimate_S2E.od.toFixed(2) }} mm) +
-    (Clearance {{ sizeEstimate_S2E.need.toFixed(2) }} mm) ≤
-    (SAD ID {{ sizeEstimate_S2E.sadID.toFixed(2) }} mm)
-  </p>
-
-  <p class="hint">Select an ETT model below for a definitive verdict.</p>
-</section>
-
-<!-- Colour ONLY when a specific MODEL is chosen -->
-<section
-  v-if="modelVerdict_S2E"
-  class="result"
-  :class="{
-    fit: modelVerdict_S2E.state === 'fit',
-    tight: modelVerdict_S2E.state === 'tight',
-    nofit: modelVerdict_S2E.state === 'no-fit'
-  }"
->
-  <div class="badge big" :data-state="modelVerdict_S2E.state">
-    {{ labelState(modelVerdict_S2E.state) }}
-  </div>
-
-  <p class="details">Using selected model OD:</p>
-
-  <h4 class="calc-heading">Calculation</h4>
-  <p class="calc-line">
-    (ETT OD {{ modelVerdict_S2E.od.toFixed(2) }} mm) +
-    (Clearance {{ modelVerdict_S2E.need.toFixed(2) }} mm) ≤
-    (SAD ID {{ modelVerdict_S2E.sadID.toFixed(2) }} mm)
-  </p>
-
-  <p v-if="selectedETTModel?.notes" class="details">
-    ETT notes: {{ selectedETTModel.notes }}
-  </p>
-  <p v-if="selectedSAD?.notes" class="details">
-    SAD notes: {{ selectedSAD.notes }}
-  </p>
-</section>
-<!-- ===== end SAD → ETT final sections ===== -->
-
-    <!-- ===========================
-         MODE: ETT → SAD
-         =========================== -->
+    <!-- ===== MODE: ETT → SAD ===== -->
     <section v-else>
-      <!-- 1) Choose ETT size & (optionally) model -->
       <div class="grid">
         <div class="field">
           <label>ETT size (ID, mm)</label>
@@ -354,11 +312,9 @@ const mathsLine_E2S = computed(() => {
         </div>
       </div>
 
-      <!-- 2) List SADs with verdicts for the chosen ETT -->
       <div v-if="ettSize_E2S != null && effectiveETT_OD_E2S != null" class="models">
         <h3>Compatible SADs</h3>
         <p class="maths">{{ mathsLine_E2S }}</p>
-
         <div class="list">
           <div
             v-for="rec in sadRecommendations_E2S"
@@ -390,7 +346,23 @@ h1 { font-size: 1.6rem; margin-bottom: 0.75rem; }
 h2 { margin: .5rem 0; font-size: 1.2rem; }
 h3 { margin: .5rem 0; font-size: 1.05rem; }
 
-.mode { display: flex; justify-content: center; gap: 1rem; margin: 1rem 0; margin-bottom: .75rem; }
+.disclaimer {
+  margin: 0.5rem 0 1.5rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: #b71c1c;
+  background: #fdecea;
+  border-left: 4px solid #e74c3c;
+  padding: 0.6rem 0.9rem;
+  border-radius: 4px;
+}
+
+.mode {
+  display: flex;
+  justify-content: center;   /* centre horizontally */
+  gap: 1rem;
+  margin: 1rem 0;
+}
 .mode label { display: flex; align-items: center; gap: .4rem; font-weight: 600; }
 
 .field { margin-bottom: 0.8rem; }
@@ -428,65 +400,24 @@ small { color: #666; }
 .result.tight  { background: #fff8e6; border-color: #f1c40f; }
 .result.nofit  { background: #fdecea; border-color: #e74c3c; }
 
+.estimate {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 2px dashed #cfcfcf;
+  border-radius: 10px;
+  background: #f9f9f9;
+}
 .badge {
   display: inline-block; font-weight: 700; padding: .15rem .5rem; border-radius: 999px; border: 1px solid rgba(0,0,0,0.06);
 }
 .badge.big { padding: .25rem .7rem; margin-bottom: .4rem; }
+.badge.neutral { background: #eaeaea; color: #222; margin-bottom: .4rem; }
 .badge[data-state="fit"] { background: #2ecc71; color: white; }
 .badge[data-state="tight"] { background: #f1c40f; color: #111; }
 .badge[data-state="no-fit"] { background: #e74c3c; color: white; }
 
 .details { margin: 0.25rem 0; }
-.maths   { margin: 0.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: #333; }
-
-.calc-heading {
-  margin-top: 0.5rem;
-  font-weight: 700;
-  font-size: 1rem;
-  color: #222;
-}
-
-.calc-line {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  background: #f9f9f9;
-  padding: 0.4rem 0.6rem;
-  border-radius: 6px;
-  margin: 0.3rem 0;
-}
-.disclaimer {
-  margin: 0.5rem 0 1.5rem;
-  font-size: 0.9rem;
-  line-height: 1.3;
-  color: #b71c1c;        /* dark red for caution */
-  background: #fdecea;   /* light red background */
-  border-left: 4px solid #e74c3c;
-  padding: 0.5rem 0.75rem;
-  border-radius: 4px;
-}
-
-.estimate {
-  margin-top: 1rem;
-  padding: 1rem;
-  border: 2px dashed #cfcfcf;      /* neutral look */
-  border-radius: 10px;
-  background: #f9f9f9;
-}
-
-.badge.neutral {
-  display: inline-block;
-  font-weight: 700;
-  padding: .15rem .5rem;
-  border-radius: 999px;
-  border: 1px solid rgba(0,0,0,0.06);
-  background: #eaeaea;
-  color: #222;
-  margin-bottom: .4rem;
-}
-
-.hint {
-  margin-top: .35rem;
-  font-size: .9rem;
-  color: #555;
-}
-
+.maths, .calc-line { margin: 0.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: #333; }
+.calc-heading { margin-top: 0.5rem; font-weight: 700; font-size: 1rem; color: #222; }
+.hint { margin-top: .35rem; font-size: .9rem; color: #555; }
 </style>
