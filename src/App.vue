@@ -181,7 +181,11 @@ const mathsLine_E2S = computed(() => {
 
 <template>
   <main class="container">
-    <h1>Airway Compatibility</h1>
+    <h1>Airway Compatibility App</h1>
+    <p class="disclaimer">
+  ⚠️ This app is intended for estimation only. Data are based on information provided by manufacturers.  
+  Always check actual device specifications and confirm compatibility before clinical use.
+</p>
 
     <!-- Mode switch -->
     <div class="mode">
@@ -407,5 +411,14 @@ small { color: #666; }
   border-radius: 6px;
   margin: 0.3rem 0;
 }
-
+.disclaimer {
+  margin: 0.5rem 0 1.5rem;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  color: #b71c1c;        /* dark red for caution */
+  background: #fdecea;   /* light red background */
+  border-left: 4px solid #e74c3c;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+}
 </style>
