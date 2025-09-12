@@ -267,10 +267,11 @@ const mathsLine_E2S = computed(() => {
       <section v-if="finalVerdict_S2E" class="result"
                :class="{ fit: finalVerdict_S2E.state==='fit', tight: finalVerdict_S2E.state==='tight', nofit: finalVerdict_S2E.state==='no-fit' }">
         <div class="badge big" :data-state="finalVerdict_S2E.state">{{ labelState(finalVerdict_S2E.state) }}</div>
-        <p class="details">
-          Using {{ finalVerdict_S2E.mode==='model' ? 'selected model OD' : 'worst-case OD for this size' }}:
-          {{ finalVerdict_S2E.od.toFixed(2) }} + {{ finalVerdict_S2E.need.toFixed(2) }} ≤ {{ finalVerdict_S2E.sadID.toFixed(2) }}
-        </p>
+        <h4 class="calc-heading">Calculation</h4>
+          <p class="calc-line">
+            (ETT OD {{ finalVerdict_S2E.od.toFixed(2) }} mm) + (Clearance {{ finalVerdict_S2E.need.toFixed(2) }} mm) ≤ 
+            (SAD ID {{ finalVerdict_S2E.sadID.toFixed(2) }} mm)
+          </p>
         <p class="details" v-if="selectedETTModel?.notes">ETT notes: {{ selectedETTModel.notes }}</p>
         <p class="details" v-if="selectedSAD?.notes">SAD notes: {{ selectedSAD.notes }}</p>
       </section>
@@ -391,4 +392,20 @@ small { color: #666; }
 
 .details { margin: 0.25rem 0; }
 .maths   { margin: 0.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: #333; }
+
+.calc-heading {
+  margin-top: 0.5rem;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #222;
+}
+
+.calc-line {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: #f9f9f9;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  margin: 0.3rem 0;
+}
+
 </style>
