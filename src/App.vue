@@ -205,7 +205,7 @@ const mathsLine_E2S = computed(() => {
     <!-- ===========================
          MODE: SAD → ETT
          =========================== -->
-    <section v-if="flow==='sadToEtt'">
+  
       <!-- 1) Choose SAD -->
       <div class="field">
         <label>SAD (Supraglottic Airway Device)</label>
@@ -269,37 +269,59 @@ const mathsLine_E2S = computed(() => {
         </div>
       </div>
 
-    <!-- Show a neutral estimate when only size is chosen -->
-<section v-if="sizeEstimate_S2E && !modelVerdict_S2E" class="estimate">
+<!-- ===== SAD → ETT: Final sections ===== -->
+
+<!-- Show a neutral estimate when only SIZE is chosen (no model picked yet) -->
+<section
+  v-if="sizeEstimate_S2E && !modelVerdict_S2E"
+  class="estimate"
+>
   <div class="badge neutral">Estimate (size worst-case)</div>
   <p class="details">
     Using worst-case OD for size {{ Number(selectedETTSize).toFixed(1) }}:
   </p>
+
   <h4 class="calc-heading">Calculation</h4>
   <p class="calc-line">
     (ETT OD {{ sizeEstimate_S2E.od.toFixed(2) }} mm) +
     (Clearance {{ sizeEstimate_S2E.need.toFixed(2) }} mm) ≤
     (SAD ID {{ sizeEstimate_S2E.sadID.toFixed(2) }} mm)
   </p>
+
   <p class="hint">Select an ETT model below for a definitive verdict.</p>
 </section>
 
-<!-- Colour only when a specific model is chosen -->
-<section v-if="modelVerdict_S2E" class="result"
-         :class="{ fit: modelVerdict_S2E.state==='fit', tight: modelVerdict_S2E.state==='tight', nofit: modelVerdict_S2E.state==='no-fit' }">
+<!-- Colour ONLY when a specific MODEL is chosen -->
+<section
+  v-if="modelVerdict_S2E"
+  class="result"
+  :class="{
+    fit: modelVerdict_S2E.state === 'fit',
+    tight: modelVerdict_S2E.state === 'tight',
+    nofit: modelVerdict_S2E.state === 'no-fit'
+  }"
+>
   <div class="badge big" :data-state="modelVerdict_S2E.state">
     {{ labelState(modelVerdict_S2E.state) }}
   </div>
+
   <p class="details">Using selected model OD:</p>
+
   <h4 class="calc-heading">Calculation</h4>
   <p class="calc-line">
     (ETT OD {{ modelVerdict_S2E.od.toFixed(2) }} mm) +
     (Clearance {{ modelVerdict_S2E.need.toFixed(2) }} mm) ≤
     (SAD ID {{ modelVerdict_S2E.sadID.toFixed(2) }} mm)
   </p>
-  <p class="details" v-if="selectedETTModel?.notes">ETT notes: {{ selectedETTModel.notes }}</p>
-  <p class="details" v-if="selectedSAD?.notes">SAD notes: {{ selectedSAD.notes }}</p>
+
+  <p v-if="selectedETTModel?.notes" class="details">
+    ETT notes: {{ selectedETTModel.notes }}
+  </p>
+  <p v-if="selectedSAD?.notes" class="details">
+    SAD notes: {{ selectedSAD.notes }}
+  </p>
 </section>
+<!-- ===== end SAD → ETT final sections ===== -->
 
     <!-- ===========================
          MODE: ETT → SAD
