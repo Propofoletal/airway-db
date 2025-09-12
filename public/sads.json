@@ -1,44 +1,92 @@
 [
   {
-    "name":"i-gel\u00ae, supraglottic airway, size 1.0, neonate, 2-5kg ",
+    "name":"i-gel\u00ae, supraglottic airway, size 1.0, neonate, 2-5 kg ",
     "manufacturer":"intersurgcial ",
     "internal_mm":5.4,
     "notes":null
   },
   {
-    "name":"i-gel\u00ae, supraglottic airway, size 1.5, infant, 5-12kg ",
+    "name":"i-gel\u00ae, supraglottic airway, size 1.5, infant, 5-12 kg ",
     "manufacturer":"intersurgcial ",
     "internal_mm":6.8,
     "notes":null
   },
   {
-    "name":" i-ge\u00ae, supraglottic airway, size 2.0, small paediatric, 10-25kg",
+    "name":" i-ge\u00ae, supraglottic airway, size 2.0, small paediatric, 10-25 kg",
     "manufacturer":"intersurgcial ",
     "internal_mm":8.7,
     "notes":null
   },
   {
-    "name":"i-gel\u00ae, supraglottic airway, size 2.5, large paediatric, 25-35kg",
+    "name":"i-gel\u00ae, supraglottic airway, size 2.5, large paediatric, 25-35 kg",
     "manufacturer":"intersurgcial ",
     "internal_mm":10.1,
     "notes":null
   },
   {
-    "name":"i-gel\u00ae, supraglottic airway, size 3, small adult, 30-60kg",
+    "name":"i-gel\u00ae, supraglottic airway, size 3, small adult, 30-60 kg",
     "manufacturer":"intersurgcial ",
     "internal_mm":11.1,
     "notes":null
   },
   {
-    "name":"i-gel\u00ae, supraglottic airway, size 4, medium adult, 50-90kg",
+    "name":"i-gel\u00ae, supraglottic airway, size 4, medium adult, 50-90 kg",
     "manufacturer":"intersurgcial ",
     "internal_mm":12.3,
     "notes":null
   },
   {
-    "name":"i-gel\u00ae, supraglottic airway, size 5, large adult, 90+kg\u00a0",
+    "name":"i-gel\u00ae, supraglottic airway, size 5, large adult, 90+ kg\u00a0",
     "manufacturer":"intersurgcial ",
     "internal_mm":13.1,
+    "notes":null
+  },
+  {
+    "name":"AuraGain, supraglottic airway, size 1, Paediatric, 2-5 kg",
+    "manufacturer":"Ambu\u00ae",
+    "internal_mm":5.0,
+    "notes":null
+  },
+  {
+    "name":"AuraGain, supraglottic airway, size 1.5, Paediatric, 5-10 kg",
+    "manufacturer":"Ambu\u00ae",
+    "internal_mm":7.0,
+    "notes":null
+  },
+  {
+    "name":"AuraGain, supraglottic airway, size 2, Paediatric, 10-20 kg",
+    "manufacturer":"Ambu\u00ae",
+    "internal_mm":8.5,
+    "notes":null
+  },
+  {
+    "name":"AuraGain, supraglottic airway, size 2.5, Paediatric, 20-30 kg",
+    "manufacturer":"Ambu\u00ae",
+    "internal_mm":10.0,
+    "notes":null
+  },
+  {
+    "name":"AuraGain, supraglottic airway, size 3, Adult, 30-50 kg",
+    "manufacturer":"Ambu\u00ae",
+    "internal_mm":10.5,
+    "notes":null
+  },
+  {
+    "name":"AuraGain, supraglottic airway, size 4, Adult, 50-70 kg",
+    "manufacturer":"Ambu\u00ae",
+    "internal_mm":12.0,
+    "notes":null
+  },
+  {
+    "name":"AuraGain, supraglottic airway, size 5, Adult, 70-100 kg",
+    "manufacturer":"Ambu\u00ae",
+    "internal_mm":12.5,
+    "notes":null
+  },
+  {
+    "name":"AuraGain, supraglottic airway, size 6, Adult, >100 kg",
+    "manufacturer":"Ambu\u00ae",
+    "internal_mm":12.5,
     "notes":null
   }
 ]
