@@ -235,7 +235,7 @@ const mathsLine_E2S = computed(() => {
             {{ rec.size.toFixed(1) }}
           </button>
         </div>
-        <small><strong>General estimate:</strong>Colours denote <em>worst-case outer diamter(OD)</em> for each ETT size across brands. Select ETT ID to review difernt models.</small>
+        <small><strong>General estimate:</strong>Colours denote <em>worst-case outer diameter(OD)</em> for each ETT size across brands.<br> Select ETT ID to review difernt models.</small>
       </div>
 
       <!-- 3) Model list within a size -->
