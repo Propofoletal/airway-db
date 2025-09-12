@@ -183,7 +183,7 @@ const mathsLine_E2S = computed(() => {
   <main class="container">
     <h1>Airway Compatibility App</h1>
     <p class="disclaimer">
-  ⚠️ This app is intended for estimation only. Data are based on information provided by manufacturers.  
+  ⚠️ This app is intended for estimation only.<br> Data are based on information provided by manufacturers.<br>
   Always check actual device specifications and confirm compatibility before clinical use.
 </p>
 
