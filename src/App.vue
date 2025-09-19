@@ -56,29 +56,28 @@
     <section v-if="flow==='sadToEtt'" class="panel">
       <h2>SAD → ETT</h2>
       <div class="grid">
+        <!-- SAD chooser (two-tier) -->
         <div class="card">
           <fieldset class="fieldset">
             <legend class="legend">Choose a SAD</legend>
 
-            <label class="label">SAD size</label>
-            <select v-model="sadSize">
-              <option value="">— Select size —</option>
-              <option v-for="size in sadSizes" :key="size" :value="size">
-                {{ size }}
-              </option>
+            <!-- Tier 1: Type + Manufacturer -->
+            <label class="label">SAD type</label>
+            <select v-model="sadTypeKey">
+              <option value="">— Select type —</option>
+              <option v-for="t in sadTypes" :key="t" :value="t">{{ t }}</option>
             </select>
 
-            <label class="label">SAD model (optional)</label>
-            <select v-model="sadModelIdx" :disabled="!sadSize">
-              <option :value="''">— Any model —</option>
-              <option v-for="(m, i) in sadModelsForSize" :key="i" :value="String(i)">
-                {{ m.name }} <span v-if="m.manufacturer">— {{ nice(m.manufacturer) }}</span>
-                (ID: {{ fmtmm(m.internal_mm) }} mm)
-              </option>
+            <!-- Tier 2: Size -->
+            <label class="label">SAD size</label>
+            <select v-model="sadSize" :disabled="!sadTypeKey">
+              <option value="">— Select size —</option>
+              <option v-for="size in sadSizesForType" :key="size" :value="size">{{ size }}</option>
             </select>
           </fieldset>
         </div>
 
+        <!-- ETT chooser (with worst-case + custom OD) -->
         <div class="card">
           <fieldset class="fieldset">
             <legend class="legend">Choose an ETT</legend>
@@ -97,42 +96,59 @@
                 (OD: {{ fmtmm(m.external_mm) }} mm)
               </option>
             </select>
+
+            <label class="label">Custom ETT OD (mm, optional)</label>
+            <input
+              class="number"
+              type="number"
+              min="2"
+              max="15"
+              step="0.1"
+              v-model.number="customEttOD"
+              placeholder="Type OD if not in list"
+            />
+            <p class="hint">
+              If no model is chosen and no custom OD is entered, we’ll use the <strong>worst-case OD</strong> from the database for the selected I.D.
+            </p>
           </fieldset>
         </div>
       </div>
 
       <!-- Results -->
       <div class="results" aria-live="polite">
-        <!-- Neutral estimate when only SAD size chosen -->
-        <div v-if="sadSize && !sadModel && !ettModel" class="result neutral">
+        <!-- Neutral estimate when only SAD chosen (no ETT OD available yet) -->
+        <div v-if="sadSize && !hasEttOD" class="result neutral">
           <div class="badge big" data-state="estimate">Estimate</div>
           <p>
-            With a size <strong>{{ sadSize }}</strong> SAD, the <em>worst-case</em> ETT outer diameter
-            to aim for is
-            <strong>{{ fmtmm(estimateMaxOD) }} mm</strong>
-            (SAD ID − clearance).
+            With <strong>{{ sadTypeKey }}</strong> size <strong>{{ sadSize }}</strong>,
+            the <em>worst-case</em> ETT outer diameter to aim for is
+            <strong>{{ fmtmm(estimateMaxOD) }} mm</strong> (min SAD ID for that size − clearance).
           </p>
           <p class="muted">
-            Pick a specific SAD and/or ETT model to see a colour-coded verdict.
+            Select an ETT model, enter a custom OD, or choose an ETT I.D. for worst-case OD.
           </p>
         </div>
 
-        <!-- Detailed verdict when a model is chosen -->
-        <div v-if="sadModel && ettModel" class="result" :class="verdict.state">
+        <!-- Verdict when SAD size + some ETT OD source is available -->
+        <div v-if="sadSize && hasEttOD" class="result" :class="verdict.state">
           <div class="badge big" :data-state="verdict.state">{{ labelState(verdict.state) }}</div>
           <div class="calcbox">
             <div class="row">
-              <span class="key">SAD</span>
+              <span class="key">SAD (family)</span>
               <span class="val">
-                {{ sadModel.name }} <span v-if="sadModel.manufacturer">— {{ nice(sadModel.manufacturer) }}</span>
-                (ID: {{ fmtmm(sadModel.internal_mm) }} mm)
+                {{ sadTypeKey }}, size {{ sadSize }}
+                <span class="muted">(using worst-case ID)</span>
               </span>
             </div>
             <div class="row">
-              <span class="key">ETT</span>
+              <span class="key">SAD ID used</span>
+              <span class="val">{{ fmtmm(sadWorstCaseID) }} mm</span>
+            </div>
+            <div class="row">
+              <span class="key">ETT OD used</span>
               <span class="val">
-                {{ ettModel.name }} <span v-if="ettModel.manufacturer">— {{ nice(ettModel.manufacturer) }}</span>
-                (OD: {{ fmtmm(ettModel.external_mm) }} mm)
+                {{ fmtmm(ettODUsed) }} mm
+                <span class="muted">({{ ettODSourceLabel }})</span>
               </span>
             </div>
             <div class="row">
@@ -142,7 +158,7 @@
             <div class="row">
               <span class="key">Test</span>
               <span class="val monospace">
-                {{ fmtmm(ettModel.external_mm) }} ≤ {{ fmtmm(sadModel.internal_mm) }} − {{ fmtmm(clearance) }}
+                {{ fmtmm(ettODUsed) }} ≤ {{ fmtmm(sadWorstCaseID) }} − {{ fmtmm(clearance) }}
                 → <strong>{{ labelState(verdict.state) }}</strong>
               </span>
             </div>
@@ -179,12 +195,26 @@
                 (OD: {{ fmtmm(m.external_mm) }} mm)
               </option>
             </select>
+
+            <label class="label">Custom ETT OD (mm, optional)</label>
+            <input
+              class="number"
+              type="number"
+              min="2"
+              max="15"
+              step="0.1"
+              v-model.number="customEttOD"
+              placeholder="Type OD if not in list"
+            />
+            <p class="hint">
+              No model? We’ll list SADs using your custom OD, or worst-case OD for the chosen I.D. if custom is empty.
+            </p>
           </fieldset>
         </div>
 
         <div class="card" aria-live="polite">
           <h3 class="subtle">Compatible SADs</h3>
-          <div v-if="!ettModel" class="muted">Pick a specific ETT model to list SAD compatibility.</div>
+          <div v-if="!hasEttOD" class="muted">Pick an ETT model, enter a custom OD, or choose an I.D. to use worst-case OD.</div>
           <ul v-else class="list">
             <li v-for="rec in sadRecommendations" :key="rec.key" :class="['item', rec.state]">
               <span class="badge" :data-state="rec.state">{{ labelState(rec.state) }}</span>
@@ -218,11 +248,14 @@ const clearance = ref(clamp(+localStorage.getItem('clearance') || 0.5, 0, 1.5))
 watch(flow, v => localStorage.setItem('flow', v))
 watch(clearance, v => localStorage.setItem('clearance', String(clamp(v, 0, 1.5))))
 
-// Selections
-const sadSize = ref('')
-const sadModelIdx = ref('')
+// SAD (two-tier)
+const sadTypeKey = ref('')   // e.g. "i-gel — Intersurgical"
+const sadSize = ref('')      // e.g. "3"
+
+// ETT
 const ettSize = ref('')
 const ettModelIdx = ref('')
+const customEttOD = ref(null) // number | null
 
 /** ---------- Load data ---------- */
 onMounted(async () => {
@@ -264,31 +297,63 @@ function labelState (s) {
   }
 }
 
-/** ---------- Derived sets ---------- */
-// Unique ETT I.D. sizes present in dataset
-const ettIDs = computed(() => {
-  const ids = new Set(etts.value.map(e => Number(e.internal_mm)).filter(n => Number.isFinite(n)))
-  return Array.from(ids).sort((a, b) => a - b).map(n => Number(n.toFixed(1)))
+// Type/manufacturer derivation and normalisation
+function baseType (name) {
+  const first = String(name || '').split(',')[0]
+  return first.replace(/[®™]/g, '').replace(/\s+/g, ' ').trim()
+}
+function normManu (m) {
+  return nice(String(m || '').replace(/Intersurgcial/i, 'Intersurgical'))
+}
+
+/** ---------- SAD Grouping (Type + Manufacturer) ---------- */
+const sadGroups = computed(() => {
+  const groups = {}
+  for (const s of sads.value) {
+    const key = `${baseType(s.name)} — ${normManu(s.manufacturer)}`
+    if (!groups[key]) groups[key] = []
+    groups[key].push(s)
+  }
+  return groups
 })
 
-// SAD sizes as present in their names (simple extract: first size token)
-const sadSizes = computed(() => {
-  // Prefer explicit “size X” token in name; fall back to integer part before comma
+const sadTypes = computed(() =>
+  Object.keys(sadGroups.value).sort((a, b) => a.localeCompare(b))
+)
+
+watch(sadTypeKey, () => {
+  sadSize.value = '' // reset size when family changes
+})
+
+/** Sizes available for selected Type/Manufacturer */
+const sadSizesForType = computed(() => {
+  if (!sadTypeKey.value) return []
+  const group = sadGroups.value[sadTypeKey.value] || []
   const sizes = new Set()
-  for (const s of sads.value) {
-    const name = String(s.name || '')
-    const m = name.match(/\bsize\s*([0-9.]+)/i) || name.match(/\b([0-9.]+)\b/)
+  for (const s of group) {
+    const m = String(s.name).match(/\bsize\s*([0-9.]+)/i)
     if (m) sizes.add(m[1])
   }
   return Array.from(sizes).sort((a, b) => Number(a) - Number(b))
 })
 
-const sadModelsForSize = computed(() => {
-  if (!sadSize.value) return []
-  const size = String(sadSize.value).trim()
-  return sads.value
-    .filter(s => String(s.name).toLowerCase().includes(`size ${size}`.toLowerCase()) || String(s.name).includes(size))
-    .sort((a, b) => Number(a.internal_mm) - Number(b.internal_mm))
+/** Worst-case (smallest) ID for selected Type/Manufacturer + Size */
+const sadWorstCaseID = computed(() => {
+  if (!sadTypeKey.value || !sadSize.value) return null
+  const group = sadGroups.value[sadTypeKey.value] || []
+  const size = String(sadSize.value).trim().toLowerCase()
+  const ids = group
+    .filter(s => String(s.name).toLowerCase().includes(`size ${size}`))
+    .map(s => Number(s.internal_mm))
+    .filter(Number.isFinite)
+  if (!ids.length) return null
+  return Math.min(...ids)
+})
+
+/** ---------- ETT Derived sets + OD logic ---------- */
+const ettIDs = computed(() => {
+  const ids = new Set(etts.value.map(e => Number(e.internal_mm)).filter(n => Number.isFinite(n)))
+  return Array.from(ids).sort((a, b) => a - b).map(n => Number(n.toFixed(1)))
 })
 
 const ettModelsForID = computed(() => {
@@ -299,25 +364,43 @@ const ettModelsForID = computed(() => {
     .sort((a, b) => Number(a.external_mm) - Number(b.external_mm))
 })
 
-const sadModel = computed(() => {
-  if (sadModelIdx.value === '' || !sadModelsForSize.value.length) return null
-  const i = Number(sadModelIdx.value)
-  return sadModelsForSize.value[i] || null
-})
-
 const ettModel = computed(() => {
   if (ettModelIdx.value === '' || !ettModelsForID.value.length) return null
   const i = Number(ettModelIdx.value)
   return ettModelsForID.value[i] || null
 })
 
+/** Worst-case OD among models for selected I.D. (largest OD) */
+const worstCaseEttOD = computed(() => {
+  if (!ettSize.value) return null
+  const ods = ettModelsForID.value.map(m => Number(m.external_mm)).filter(Number.isFinite)
+  if (!ods.length) return null
+  return Math.max(...ods)
+})
+
+/** ETT OD in use (priority: custom → model → worst-case) */
+const ettODUsed = computed(() => {
+  if (Number.isFinite(Number(customEttOD.value))) return Number(customEttOD.value)
+  if (ettModel.value && Number.isFinite(Number(ettModel.value.external_mm))) return Number(ettModel.value.external_mm)
+  if (Number.isFinite(Number(worstCaseEttOD.value))) return Number(worstCaseEttOD.value)
+  return null
+})
+
+/** Where did the OD come from? */
+const ettODSourceLabel = computed(() => {
+  if (Number.isFinite(Number(customEttOD.value))) return 'custom'
+  if (ettModel.value) return 'selected model'
+  if (Number.isFinite(Number(worstCaseEttOD.value)) && ettSize.value) return 'worst-case (database)'
+  return '—'
+})
+
+/** Do we have any OD to work with? */
+const hasEttOD = computed(() => Number.isFinite(Number(ettODUsed.value)))
+
 /** ---------- Calculations ---------- */
 const estimateMaxOD = computed(() => {
-  // When only SAD size chosen (no specific model), we show worst-case:
-  // take the smallest ID among models for that size, subtract clearance
-  if (!sadModelsForSize.value.length) return null
-  const minID = Math.min(...sadModelsForSize.value.map(m => Number(m.internal_mm)).filter(Number.isFinite))
-  const est = minID - Number(clearance.value)
+  if (!sadWorstCaseID.value && sadWorstCaseID.value !== 0) return null
+  const est = Number(sadWorstCaseID.value) - Number(clearance.value)
   return est > 0 ? Number(est.toFixed(1)) : 0
 })
 
@@ -330,16 +413,17 @@ function stateFor (sadID, ettOD, clear) {
 }
 
 const verdict = computed(() => {
-  if (!sadModel.value || !ettModel.value) return { state: 'unknown' }
-  const sadID = Number(sadModel.value.internal_mm)
-  const ettOD = Number(ettModel.value.external_mm)
+  if (!sadWorstCaseID.value && sadWorstCaseID.value !== 0) return { state: 'unknown' }
+  if (!hasEttOD.value) return { state: 'unknown' }
+  const sadID = Number(sadWorstCaseID.value)
+  const ettOD = Number(ettODUsed.value)
   const state = stateFor(sadID, ettOD, Number(clearance.value))
   return { state }
 })
 
 const sadRecommendations = computed(() => {
-  if (!ettModel.value) return []
-  const ettOD = Number(ettModel.value.external_mm)
+  if (!hasEttOD.value) return []
+  const ettOD = Number(ettODUsed.value)
   const clear = Number(clearance.value)
   return sads.value
     .map((sad, idx) => {
@@ -371,9 +455,7 @@ const sadRecommendations = computed(() => {
 h1 { font-size: 1.6rem; margin: 0 0 .25rem; }
 h2 { font-size: 1.25rem; margin: 1rem 0 .5rem; }
 h3.subtle { margin: 0 0 .5rem; font-weight: 600; color: #374151; }
-.disclaimer {
-  font-size: .9rem; color: #6b7280;
-}
+.disclaimer { font-size: .9rem; color: #6b7280; }
 .footer { margin-top: 2rem; text-align: center; color: #6b7280; }
 
 .error {
@@ -439,7 +521,7 @@ input[type="number"] { width: 7rem; }
 }
 .result.fit { border-color: #16a34a33; background: #16a34a0d; }
 .result.tight { border-color: #f59e0b33; background: #f59e0b0d; }
-.result.no-fit, .result.no-fit { border-color: #ef444433; background: #ef44440d; }
+.result.no-fit { border-color: #ef444433; background: #ef44440d; }
 
 .badge {
   display: inline-block; font-weight: 700; font-size: .75rem; padding: .25rem .5rem; border-radius: 999px;
@@ -454,7 +536,7 @@ input[type="number"] { width: 7rem; }
 .calcbox {
   margin-top: .75rem; border: 1px dashed #cbd5e1; border-radius: 12px; padding: .75rem; background: #f8fafc;
 }
-.row { display: grid; grid-template-columns: 120px 1fr; gap: .5rem; margin: .25rem 0; }
+.row { display: grid; grid-template-columns: 160px 1fr; gap: .5rem; margin: .25rem 0; }
 .key { color: #64748b; font-weight: 600; }
 .val { color: #111827; }
 .monospace { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
