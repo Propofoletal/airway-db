@@ -304,9 +304,13 @@ function labelState (s) {
 
 // Type/manufacturer derivation and normalisation
 function baseType (name) {
-  const first = String(name || '').split(',')[0]
-  return first.replace(/[®™]/g, '').replace(/\s+/g, ' ').trim()
+  const first = String(name || '').split(',')[0].trim()
+  let clean = first.replace(/[™]/g, '').replace(/\s+/g, ' ')
+  // Force "i-gel" family to show with ®
+  if (/^i-gel/i.test(clean)) clean = 'i-gel'
+  return clean
 }
+
 function normManu (m) {
   return nice(String(m || '').replace(/Intersurgcial/i, 'Intersurgical'))
 }
