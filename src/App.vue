@@ -48,7 +48,7 @@
           />
           <span class="unit">mm</span>
         </div>
-        <p class="hint">We’ll prefer a “fit” when ETT OD ≤ SAD ID − clearance. “Tight” if ≤ SAD ID. Otherwise “no-fit”.</p>
+        <p class="hint">We prefer a “fit” when ETT OD ≤ SAD ID − clearance. “Tight” if ≤ SAD ID. Otherwise “no-fit”.</p>
       </fieldset>
     </section>
 
@@ -77,7 +77,7 @@
           </fieldset>
         </div>
 
-        <!-- ETT chooser (with worst-case + custom OD) -->
+        <!-- ETT chooser (with worst-case + custom OD and auto-fill) -->
         <div class="card">
           <fieldset class="fieldset">
             <legend class="legend">Choose an ETT</legend>
@@ -105,10 +105,11 @@
               max="15"
               step="0.1"
               v-model.number="customEttOD"
-              placeholder="Type OD if not in list"
+              @input="customTouched = true"
+              placeholder="Auto-fills from model or worst-case"
             />
             <p class="hint">
-              If no model is chosen and no custom OD is entered, we’ll use the <strong>worst-case OD</strong> from the database for the selected I.D.
+              Auto-fills from the selected model, or worst-case for the chosen I.D. You can override by typing.
             </p>
           </fieldset>
         </div>
@@ -116,7 +117,7 @@
 
       <!-- Results -->
       <div class="results" aria-live="polite">
-        <!-- Neutral estimate when only SAD chosen (no ETT OD available yet) -->
+        <!-- Neutral estimate when only SAD chosen (no ETT OD source yet) -->
         <div v-if="sadSize && !hasEttOD" class="result neutral">
           <div class="badge big" data-state="estimate">Estimate</div>
           <p>
@@ -125,7 +126,7 @@
             <strong>{{ fmtmm(estimateMaxOD) }} mm</strong> (min SAD ID for that size − clearance).
           </p>
           <p class="muted">
-            Select an ETT model, enter a custom OD, or choose an ETT I.D. for worst-case OD.
+            Select an ETT model, enter a custom OD, or choose an I.D. for worst-case OD.
           </p>
         </div>
 
@@ -204,7 +205,8 @@
               max="15"
               step="0.1"
               v-model.number="customEttOD"
-              placeholder="Type OD if not in list"
+              @input="customTouched = true"
+              placeholder="Auto-fills from model or worst-case"
             />
             <p class="hint">
               No model? We’ll list SADs using your custom OD, or worst-case OD for the chosen I.D. if custom is empty.
@@ -255,7 +257,10 @@ const sadSize = ref('')      // e.g. "3"
 // ETT
 const ettSize = ref('')
 const ettModelIdx = ref('')
-const customEttOD = ref(null) // number | null
+
+// OD entry + behaviour
+const customEttOD = ref(null)     // number | null
+const customTouched = ref(false)  // user has typed in OD input
 
 /** ---------- Load data ---------- */
 onMounted(async () => {
@@ -374,13 +379,20 @@ const ettModel = computed(() => {
 const worstCaseEttOD = computed(() => {
   if (!ettSize.value) return null
   const ods = ettModelsForID.value.map(m => Number(m.external_mm)).filter(Number.isFinite)
-  if (!ods.length) return null
-  return Math.max(...ods)
+  return ods.length ? Math.max(...ods) : null
 })
+
+/** Did the user explicitly type a custom OD? */
+const hasCustom = computed(() =>
+  customTouched.value &&
+  customEttOD.value !== null &&
+  customEttOD.value !== '' &&
+  Number.isFinite(Number(customEttOD.value))
+)
 
 /** ETT OD in use (priority: custom → model → worst-case) */
 const ettODUsed = computed(() => {
-  if (Number.isFinite(Number(customEttOD.value))) return Number(customEttOD.value)
+  if (hasCustom.value) return Number(customEttOD.value)
   if (ettModel.value && Number.isFinite(Number(ettModel.value.external_mm))) return Number(ettModel.value.external_mm)
   if (Number.isFinite(Number(worstCaseEttOD.value))) return Number(worstCaseEttOD.value)
   return null
@@ -388,14 +400,35 @@ const ettODUsed = computed(() => {
 
 /** Where did the OD come from? */
 const ettODSourceLabel = computed(() => {
-  if (Number.isFinite(Number(customEttOD.value))) return 'custom'
+  if (hasCustom.value) return 'custom'
   if (ettModel.value) return 'selected model'
-  if (Number.isFinite(Number(worstCaseEttOD.value)) && ettSize.value) return 'worst-case (database)'
+  if (worstCaseEttOD.value != null && ettSize.value) return 'worst-case (database)'
   return '—'
 })
 
 /** Do we have any OD to work with? */
-const hasEttOD = computed(() => Number.isFinite(Number(ettODUsed.value)))
+const hasEttOD = computed(() => ettODUsed.value != null && Number.isFinite(Number(ettODUsed.value)))
+
+/** ---------- Auto-fill behaviour (don’t overwrite typed values) ---------- */
+// Model selected → auto-fill OD unless user typed
+watch(ettModelIdx, () => {
+  if (!ettModel.value) return
+  if (!customTouched.value) customEttOD.value = Number(ettModel.value.external_mm)
+})
+// I.D. changed (no model) → auto-fill worst-case unless user typed
+watch(ettSize, () => {
+  if (ettModel.value) return
+  if (!customTouched.value) customEttOD.value = worstCaseEttOD.value != null ? Number(worstCaseEttOD.value) : null
+})
+// If user clears the field, allow auto-fill again
+watch(customEttOD, (v) => {
+  if (v === null || v === '') customTouched.value = false
+})
+// Optional: reset OD state when switching flow
+watch(flow, () => {
+  customEttOD.value = null
+  customTouched.value = false
+})
 
 /** ---------- Calculations ---------- */
 const estimateMaxOD = computed(() => {
