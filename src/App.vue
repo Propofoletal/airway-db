@@ -409,9 +409,15 @@ watch(ettModelIdx, () => {
   if (!ettModel.value) return
   if (!customTouched.value) customEttOD.value = Number(ettModel.value.external_mm)
 })
+// When I.D. changes: reset model to "Any" and (if user hasn't typed) auto-fill worst-case OD
 watch(ettSize, () => {
-  if (ettModel.value) return
-  if (!customTouched.value) customEttOD.value = worstCaseEttOD.value != null ? Number(worstCaseEttOD.value) : null
+  // force the model dropdown back to "Any"
+  ettModelIdx.value = ''
+
+  // if user hasn't typed a custom OD, auto-fill from new I.D.'s worst-case
+  if (!customTouched.value) {
+    customEttOD.value = worstCaseEttOD.value != null ? Number(worstCaseEttOD.value) : null
+  }
 })
 watch(customEttOD, (v) => {
   if (v === null || v === '') customTouched.value = false
