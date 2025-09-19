@@ -439,7 +439,7 @@ input[type="number"] { width: 7rem; }
 }
 .result.fit { border-color: #16a34a33; background: #16a34a0d; }
 .result.tight { border-color: #f59e0b33; background: #f59e0b0d; }
-.result['no-fit'], .result.no-fit { border-color: #ef444433; background: #ef44440d; }
+.result.no-fit, .result.no-fit { border-color: #ef444433; background: #ef44440d; }
 
 .badge {
   display: inline-block; font-weight: 700; font-size: .75rem; padding: .25rem .5rem; border-radius: 999px;
