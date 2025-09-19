@@ -1,7 +1,20 @@
 <template>
-  <main class="container">
+  <main class="container" :data-theme="effectiveTheme">
     <header class="header">
-      <h1>Airway Device Compatibility Checker</h1>
+      <div class="toprow">
+        <h1>Airway Device Compatibility Checker</h1>
+
+        <!-- Theme switcher -->
+        <label class="theme-switch">
+          <span class="sr-only">Theme</span>
+          <select v-model="themeChoice" title="Theme">
+            <option value="auto">Auto</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </label>
+      </div>
+
       <p class="disclaimer">
         estimation only, manufacturer data, check specs, always check actual device fit before clinical use.
       </p>
@@ -61,7 +74,7 @@
           <fieldset class="fieldset">
             <legend class="legend">Choose a SAD</legend>
 
-            <!-- Tier 1: Type + Manufacturer -->
+            <!-- Tier 1: Type + Manufacturer (comma separator, i-gel®) -->
             <label class="label">SAD type</label>
             <select v-model="sadTypeKey">
               <option value="">— Select type —</option>
@@ -77,7 +90,7 @@
           </fieldset>
         </div>
 
-        <!-- ETT chooser (with worst-case + custom OD and auto-fill) -->
+        <!-- ETT chooser (worst-case + custom OD and auto-fill) -->
         <div class="card">
           <fieldset class="fieldset">
             <legend class="legend">Choose an ETT</legend>
@@ -98,16 +111,19 @@
             </select>
 
             <label class="label">Custom ETT OD (mm, optional)</label>
-            <input
-              class="number"
-              type="number"
-              min="2"
-              max="15"
-              step="0.1"
-              v-model.number="customEttOD"
-              @input="customTouched = true"
-              placeholder="Auto-fills from model or worst-case"
-            />
+            <div class="od-row">
+              <input
+                class="number"
+                type="number"
+                min="2"
+                max="15"
+                step="0.1"
+                v-model.number="customEttOD"
+                @input="customTouched = true"
+                placeholder="Auto-fills from model or worst-case"
+              />
+              <button v-if="customTouched" class="btn-reset" type="button" @click="resetCustomOD">Reset</button>
+            </div>
             <p class="hint">
               Auto-fills from the selected model, or worst-case for the chosen I.D. You can override by typing.
             </p>
@@ -198,16 +214,19 @@
             </select>
 
             <label class="label">Custom ETT OD (mm, optional)</label>
-            <input
-              class="number"
-              type="number"
-              min="2"
-              max="15"
-              step="0.1"
-              v-model.number="customEttOD"
-              @input="customTouched = true"
-              placeholder="Auto-fills from model or worst-case"
-            />
+            <div class="od-row">
+              <input
+                class="number"
+                type="number"
+                min="2"
+                max="15"
+                step="0.1"
+                v-model.number="customEttOD"
+                @input="customTouched = true"
+                placeholder="Auto-fills from model or worst-case"
+              />
+              <button v-if="customTouched" class="btn-reset" type="button" @click="resetCustomOD">Reset</button>
+            </div>
             <p class="hint">
               No model? We’ll list SADs using your custom OD, or worst-case OD for the chosen I.D. if custom is empty.
             </p>
@@ -246,29 +265,39 @@ const errorMsg = ref('')
 
 const flow = ref(localStorage.getItem('flow') || 'sadToEtt')
 const clearance = ref(clamp(+localStorage.getItem('clearance') || 0.5, 0, 1.5))
-
 watch(flow, v => localStorage.setItem('flow', v))
 watch(clearance, v => localStorage.setItem('clearance', String(clamp(v, 0, 1.5))))
 
-// SAD (two-tier)
-const sadTypeKey = ref('')   // e.g. "i-gel — Intersurgical"
-const sadSize = ref('')      // e.g. "3"
+// Theme (Auto/Light/Dark) with system follow
+const themeChoice = ref(localStorage.getItem('themeChoice') || 'auto') // 'auto' | 'light' | 'dark'
+const prefersDark = ref(false)
+const effectiveTheme = computed(() => themeChoice.value === 'auto' ? (prefersDark.value ? 'dark' : 'light') : themeChoice.value)
+watch(themeChoice, v => localStorage.setItem('themeChoice', v))
 
-// ETT
+onMounted(() => {
+  const mq = window.matchMedia('(prefers-color-scheme: dark)')
+  const apply = () => { prefersDark.value = mq.matches }
+  apply()
+  mq.addEventListener ? mq.addEventListener('change', apply) : mq.addListener(apply)
+})
+
+/** SAD (two-tier) */
+const sadTypeKey = ref('') // e.g. "i-gel®, Intersurgical"
+const sadSize = ref('')     // e.g. "3"
+
+/** ETT */
 const ettSize = ref('')
 const ettModelIdx = ref('')
 
 // OD entry + behaviour
 const customEttOD = ref(null)     // number | null
 const customTouched = ref(false)  // user has typed in OD input
+const resetCustomOD = () => { customEttOD.value = null; customTouched.value = false }
 
 /** ---------- Load data ---------- */
 onMounted(async () => {
   try {
-    const [sadsRes, ettsRes] = await Promise.all([
-      fetch('/sads.json'),
-      fetch('/etts.json'),
-    ])
+    const [sadsRes, ettsRes] = await Promise.all([ fetch('/sads.json'), fetch('/etts.json') ])
     if (!sadsRes.ok || !ettsRes.ok) throw new Error('Failed to load data files')
     sads.value = await sadsRes.json()
     etts.value = await ettsRes.json()
@@ -282,57 +311,31 @@ onMounted(async () => {
 
 /** ---------- Helpers ---------- */
 const VERDICT_RANK = Object.freeze({ fit: 0, tight: 1, 'no-fit': 2, unknown: 3 })
+function nice (str) { return typeof str === 'string' ? str.replace(/\s+/g, ' ').trim() : str }
+function fmtmm (n) { if (n == null || Number.isNaN(+n)) return '—'; return Number(n).toFixed(1) }
+function clamp (v, min, max) { return Math.min(max, Math.max(min, Number.isFinite(+v) ? +v : min)) }
+function labelState (s) { return s==='fit'?'Fit':s==='tight'?'Tight':s==='no-fit'?'No fit':'—' }
 
-function nice (str) {
-  return typeof str === 'string' ? str.replace(/\s+/g, ' ').trim() : str
-}
-function fmtmm (n) {
-  if (n == null || Number.isNaN(+n)) return '—'
-  return Number(n).toFixed(1)
-}
-function clamp (v, min, max) {
-  return Math.min(max, Math.max(min, Number.isFinite(+v) ? +v : min))
-}
-function labelState (s) {
-  switch (s) {
-    case 'fit': return 'Fit'
-    case 'tight': return 'Tight'
-    case 'no-fit': return 'No fit'
-    default: return '—'
-  }
-}
-
-// Type/manufacturer derivation and normalisation
+// Normalise type names; ensure "i-gel®"; manufacturer fix; comma separator
+// Normalise type names; strip ® and ™; compress spaces
 function baseType (name) {
   const first = String(name || '').split(',')[0].trim()
-  let clean = first.replace(/[™]/g, '').replace(/\s+/g, ' ')
-  // Force "i-gel" family to show with ®
-  if (/^i-gel/i.test(clean)) clean = 'i-gel'
-  return clean
+  return first.replace(/[®™]/g, '').replace(/\s+/g, ' ')
 }
-
-function normManu (m) {
-  return nice(String(m || '').replace(/Intersurgcial/i, 'Intersurgical'))
-}
+function normManu (m) { return nice(String(m || '').replace(/Intersurgcial/i, 'Intersurgical')) }
 
 /** ---------- SAD Grouping (Type + Manufacturer) ---------- */
 const sadGroups = computed(() => {
   const groups = {}
   for (const s of sads.value) {
-    const key = `${baseType(s.name)} — ${normManu(s.manufacturer)}`
+    const key = `${baseType(s.name)}, ${normManu(s.manufacturer)}`
     if (!groups[key]) groups[key] = []
     groups[key].push(s)
   }
   return groups
 })
-
-const sadTypes = computed(() =>
-  Object.keys(sadGroups.value).sort((a, b) => a.localeCompare(b))
-)
-
-watch(sadTypeKey, () => {
-  sadSize.value = '' // reset size when family changes
-})
+const sadTypes = computed(() => Object.keys(sadGroups.value).sort((a, b) => a.localeCompare(b)))
+watch(sadTypeKey, () => { sadSize.value = '' })
 
 /** Sizes available for selected Type/Manufacturer */
 const sadSizesForType = computed(() => {
@@ -364,7 +367,6 @@ const ettIDs = computed(() => {
   const ids = new Set(etts.value.map(e => Number(e.internal_mm)).filter(n => Number.isFinite(n)))
   return Array.from(ids).sort((a, b) => a - b).map(n => Number(n.toFixed(1)))
 })
-
 const ettModelsForID = computed(() => {
   if (!ettSize.value) return []
   const id = Number(ettSize.value)
@@ -372,67 +374,49 @@ const ettModelsForID = computed(() => {
     .filter(e => Number(e.internal_mm) === id)
     .sort((a, b) => Number(a.external_mm) - Number(b.external_mm))
 })
-
 const ettModel = computed(() => {
   if (ettModelIdx.value === '' || !ettModelsForID.value.length) return null
   const i = Number(ettModelIdx.value)
   return ettModelsForID.value[i] || null
 })
-
-/** Worst-case OD among models for selected I.D. (largest OD) */
 const worstCaseEttOD = computed(() => {
   if (!ettSize.value) return null
   const ods = ettModelsForID.value.map(m => Number(m.external_mm)).filter(Number.isFinite)
   return ods.length ? Math.max(...ods) : null
 })
-
-/** Did the user explicitly type a custom OD? */
 const hasCustom = computed(() =>
   customTouched.value &&
   customEttOD.value !== null &&
   customEttOD.value !== '' &&
   Number.isFinite(Number(customEttOD.value))
 )
-
-/** ETT OD in use (priority: custom → model → worst-case) */
 const ettODUsed = computed(() => {
   if (hasCustom.value) return Number(customEttOD.value)
   if (ettModel.value && Number.isFinite(Number(ettModel.value.external_mm))) return Number(ettModel.value.external_mm)
   if (Number.isFinite(Number(worstCaseEttOD.value))) return Number(worstCaseEttOD.value)
   return null
 })
-
-/** Where did the OD come from? */
 const ettODSourceLabel = computed(() => {
   if (hasCustom.value) return 'custom'
   if (ettModel.value) return 'selected model'
   if (worstCaseEttOD.value != null && ettSize.value) return 'worst-case (database)'
   return '—'
 })
-
-/** Do we have any OD to work with? */
 const hasEttOD = computed(() => ettODUsed.value != null && Number.isFinite(Number(ettODUsed.value)))
 
-/** ---------- Auto-fill behaviour (don’t overwrite typed values) ---------- */
-// Model selected → auto-fill OD unless user typed
+/** Auto-fill behaviour (don’t overwrite typed values) */
 watch(ettModelIdx, () => {
   if (!ettModel.value) return
   if (!customTouched.value) customEttOD.value = Number(ettModel.value.external_mm)
 })
-// I.D. changed (no model) → auto-fill worst-case unless user typed
 watch(ettSize, () => {
   if (ettModel.value) return
   if (!customTouched.value) customEttOD.value = worstCaseEttOD.value != null ? Number(worstCaseEttOD.value) : null
 })
-// If user clears the field, allow auto-fill again
 watch(customEttOD, (v) => {
   if (v === null || v === '') customTouched.value = false
 })
-// Optional: reset OD state when switching flow
-watch(flow, () => {
-  customEttOD.value = null
-  customTouched.value = false
-})
+watch(flow, () => { resetCustomOD() })
 
 /** ---------- Calculations ---------- */
 const estimateMaxOD = computed(() => {
@@ -440,7 +424,6 @@ const estimateMaxOD = computed(() => {
   const est = Number(sadWorstCaseID.value) - Number(clearance.value)
   return est > 0 ? Number(est.toFixed(1)) : 0
 })
-
 function stateFor (sadID, ettOD, clear) {
   if (!Number.isFinite(sadID) || !Number.isFinite(ettOD)) return 'unknown'
   const target = sadID - clear
@@ -448,7 +431,6 @@ function stateFor (sadID, ettOD, clear) {
   if (ettOD <= sadID) return 'tight'
   return 'no-fit'
 }
-
 const verdict = computed(() => {
   if (!sadWorstCaseID.value && sadWorstCaseID.value !== 0) return { state: 'unknown' }
   if (!hasEttOD.value) return { state: 'unknown' }
@@ -457,7 +439,6 @@ const verdict = computed(() => {
   const state = stateFor(sadID, ettOD, Number(clearance.value))
   return { state }
 })
-
 const sadRecommendations = computed(() => {
   if (!hasEttOD.value) return []
   const ettOD = Number(ettODUsed.value)
@@ -466,11 +447,7 @@ const sadRecommendations = computed(() => {
     .map((sad, idx) => {
       const sadID = Number(sad.internal_mm)
       const state = stateFor(sadID, ettOD, clear)
-      return {
-        key: `${idx}-${sadID}`,
-        sad,
-        state,
-      }
+      return { key: `${idx}-${sadID}`, sad, state }
     })
     .sort((a, b) =>
       (VERDICT_RANK[a.state] - VERDICT_RANK[b.state]) ||
@@ -480,27 +457,103 @@ const sadRecommendations = computed(() => {
 </script>
 
 <style scoped>
-/* Layout */
+/* ---------- Design tokens via CSS variables ---------- */
+:root, .container[data-theme="light"] {
+  --bg: #ffffff;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --card: #ffffff;
+  --border: #e5e7eb;
+  --shadow: 0 1px 2px rgba(0,0,0,.06);
+
+  --accent-fit: #16a34a;
+  --accent-tight: #f59e0b;
+  --accent-nofit: #ef4444;
+  --accent-est: #64748b;
+
+  --tint-fit: rgba(22,163,74,0.05);
+  --tint-tight: rgba(245,158,11,0.06);
+  --tint-nofit: rgba(239,68,68,0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b1020;
+    --text: #e6e8ee;
+    --muted: #a3a7b5;
+    --card: #12172a;
+    --border: #2a2f45;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+
+    --tint-fit: rgba(22,163,74,0.12);
+    --tint-tight: rgba(245,158,11,0.14);
+    --tint-nofit: rgba(239,68,68,0.14);
+  }
+}
+
+/* Force dark regardless of system when user picks "dark" */
+.container[data-theme="dark"] {
+  --bg: #0b1020;
+  --text: #e6e8ee;
+  --muted: #a3a7b5;
+  --card: #12172a;
+  --border: #2a2f45;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+
+  --tint-fit: rgba(22,163,74,0.12);
+  --tint-tight: rgba(245,158,11,0.14);
+  --tint-nofit: rgba(239,68,68,0.14);
+}
+
+/* Force light when user picks "light" */
+.container[data-theme="light"] {
+  --bg: #ffffff;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --card: #ffffff;
+  --border: #e5e7eb;
+  --shadow: 0 1px 2px rgba(0,0,0,.06);
+
+  --tint-fit: rgba(22,163,74,0.05);
+  --tint-tight: rgba(245,158,11,0.06);
+  --tint-nofit: rgba(239,68,68,0.06);
+}
+
+/* ---------- Base layout ---------- */
 .container {
   max-width: 1000px;
   margin: 0 auto;
   padding: 2rem 1rem 4rem;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-  color: #1f2937;
+  color: var(--text);
+  background: var(--bg);
 }
-.header { text-align: center; margin-bottom: 1.25rem; }
+.header { margin-bottom: 1.25rem; }
+.toprow {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+}
 h1 { font-size: 1.6rem; margin: 0 0 .25rem; }
 h2 { font-size: 1.25rem; margin: 1rem 0 .5rem; }
-h3.subtle { margin: 0 0 .5rem; font-weight: 600; color: #374151; }
-.disclaimer { font-size: .9rem; color: #6b7280; }
-.footer { margin-top: 2rem; text-align: center; color: #6b7280; }
+h3.subtle { margin: 0 0 .5rem; font-weight: 600; color: var(--text); opacity: .9; }
+.disclaimer { font-size: .9rem; color: var(--muted); }
+.footer { margin-top: 2rem; text-align: center; color: var(--muted); }
 
+/* Theme switcher */
+.theme-switch select {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  border-radius: 10px;
+  padding: .4rem .6rem;
+}
+.sr-only { position: absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+
+/* Alerts */
 .error {
-  margin: .75rem auto 0;
-  max-width: 720px;
-  background: #fdecea;
-  border: 1px solid #e74c3c;
-  color: #9b2c2c;
+  margin: .75rem 0 0;
+  background: color-mix(in oklab, var(--accent-nofit) 15%, transparent);
+  border: 1px solid var(--accent-nofit);
+  color: var(--text);
   padding: .75rem;
   border-radius: 10px;
 }
@@ -508,19 +561,19 @@ h3.subtle { margin: 0 0 .5rem; font-weight: 600; color: #374151; }
 /* Controls */
 .mode { display: flex; justify-content: center; margin: 1rem 0; }
 .segmented {
-  display: inline-flex; gap: .5rem; background: #f3f4f6; padding: .25rem; border-radius: 999px;
-  border: 1px solid #e5e7eb;
+  display: inline-flex; gap: .5rem; background: var(--card); padding: .25rem; border-radius: 999px;
+  border: 1px solid var(--border); box-shadow: var(--shadow);
 }
 .chip {
   display: inline-flex; align-items: center; gap: .5rem;
   padding: .4rem .9rem; border-radius: 999px; cursor: pointer; user-select: none;
-  font-weight: 600; color: #374151;
+  font-weight: 600; color: var(--text);
 }
 .chip input { display: none; }
-.chip.active { background: white; box-shadow: 0 1px 2px rgba(0,0,0,.06); border: 1px solid #e5e7eb; }
+.chip.active { background: var(--bg); box-shadow: var(--shadow); border: 1px solid var(--border); }
 
 .controls { display: flex; justify-content: center; margin: 1rem 0; }
-.fieldset { border: 1px solid #e5e7eb; border-radius: 12px; padding: 1rem; }
+.fieldset { border: 1px solid var(--border); border-radius: 12px; padding: 1rem; background: var(--card); }
 .legend { font-weight: 700; padding: 0 .25rem; }
 .label { display: block; font-weight: 600; margin-top: .75rem; margin-bottom: .25rem; }
 select, input[type="number"], input[type="range"] {
@@ -528,68 +581,67 @@ select, input[type="number"], input[type="range"] {
   box-sizing: border-box;
 }
 select, input[type="number"] {
-  border: 1px solid #e5e7eb; border-radius: 10px; padding: .5rem .6rem; background: #fff;
+  border: 1px solid var(--border); border-radius: 10px; padding: .5rem .6rem; background: var(--bg); color: var(--text);
 }
 input[type="number"] { width: 7rem; }
+input::placeholder { color: color-mix(in oklab, var(--muted) 70%, transparent); }
 
 .clearance { display: flex; align-items: center; gap: .75rem; }
 .clearance .number { width: 6rem; }
-.unit { color: #6b7280; }
-.hint { margin: .5rem 0 0; color: #6b7280; font-size: .9rem; }
+.unit { color: var(--muted); }
+.hint { margin: .5rem 0 0; color: var(--muted); font-size: .9rem; }
 
 /* Panels */
 .panel { margin-top: .5rem; }
-.grid {
-  display: grid; gap: 1rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-@media (max-width: 860px) {
-  .grid { grid-template-columns: 1fr; }
-}
-.card {
-  background: white; border: 1px solid #e5e7eb; border-radius: 14px; padding: 1rem;
-  box-shadow: 0 1px 2px rgba(0,0,0,.03);
-}
+.grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1rem; box-shadow: var(--shadow); }
 
 /* Results */
 .results { margin-top: 1rem; }
-.result {
-  border: 1px solid #e5e7eb; border-radius: 14px; padding: 1rem; background: #fff;
-}
-.result.fit { border-color: #16a34a33; background: #16a34a0d; }
-.result.tight { border-color: #f59e0b33; background: #f59e0b0d; }
-.result.no-fit { border-color: #ef444433; background: #ef44440d; }
+.result { border: 1px solid var(--border); border-radius: 14px; padding: 1rem; background: var(--card); }
+.result.fit { border-color: color-mix(in oklab, var(--accent-fit) 55%, var(--border)); background: var(--tint-fit); }
+.result.tight { border-color: color-mix(in oklab, var(--accent-tight) 55%, var(--border)); background: var(--tint-tight); }
+.result.no-fit { border-color: color-mix(in oklab, var(--accent-nofit) 55%, var(--border)); background: var(--tint-nofit); }
 
 .badge {
   display: inline-block; font-weight: 700; font-size: .75rem; padding: .25rem .5rem; border-radius: 999px;
-  border: 1px solid #e5e7eb; background: #fff; margin-right: .5rem;
+  border: 1px solid var(--border); background: var(--bg); margin-right: .5rem; color: var(--text);
 }
 .badge.big { font-size: .9rem; padding: .35rem .65rem; }
-.badge[data-state="fit"] { border-color: #16a34a; color: #166534; }
-.badge[data-state="tight"] { border-color: #f59e0b; color: #92400e; }
-.badge[data-state="no-fit"] { border-color: #ef4444; color: #991b1b; }
-.badge[data-state="estimate"] { border-color: #64748b; color: #334155; }
+.badge[data-state="fit"] { border-color: var(--accent-fit); color: var(--accent-fit); }
+.badge[data-state="tight"] { border-color: var(--accent-tight); color: var(--accent-tight); }
+.badge[data-state="no-fit"] { border-color: var(--accent-nofit); color: var(--accent-nofit); }
+.badge[data-state="estimate"] { border-color: var(--accent-est); color: var(--accent-est); }
 
-.calcbox {
-  margin-top: .75rem; border: 1px dashed #cbd5e1; border-radius: 12px; padding: .75rem; background: #f8fafc;
-}
+.calcbox { margin-top: .75rem; border: 1px dashed var(--border); border-radius: 12px; padding: .75rem; background: color-mix(in oklab, var(--bg) 70%, var(--card)); }
 .row { display: grid; grid-template-columns: 160px 1fr; gap: .5rem; margin: .25rem 0; }
-.key { color: #64748b; font-weight: 600; }
-.val { color: #111827; }
+.key { color: var(--muted); font-weight: 600; }
+.val { color: var(--text); }
 .monospace { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
-
-.muted { color: #6b7280; font-size: .95rem; }
 
 /* List */
 .list { list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem; }
 .item {
   display: grid; align-items: center;
   grid-template-columns: auto 1fr auto; gap: .5rem;
-  padding: .5rem .6rem; border: 1px solid #e5e7eb; border-radius: 12px; background: #fff;
+  padding: .5rem .6rem; border: 1px solid var(--border); border-radius: 12px; background: var(--card);
 }
 .name { font-weight: 600; }
-.meta { color: #6b7280; font-variant-numeric: tabular-nums; }
-.item.fit { border-color: #16a34a66; background: #16a34a0a; }
-.item.tight { border-color: #f59e0b66; background: #f59e0b0a; }
-.item.no-fit { border-color: #ef444466; background: #ef44440a; }
+.meta { color: var(--muted); font-variant-numeric: tabular-nums; }
+.item.fit { border-color: color-mix(in oklab, var(--accent-fit) 50%, var(--border)); background: var(--tint-fit); }
+.item.tight { border-color: color-mix(in oklab, var(--accent-tight) 50%, var(--border)); background: var(--tint-tight); }
+.item.no-fit { border-color: color-mix(in oklab, var(--accent-nofit) 50%, var(--border)); background: var(--tint-nofit); }
+
+/* Small UI bits */
+.od-row { display: flex; align-items: center; gap: .5rem; }
+.btn-reset {
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 8px;
+  padding: .45rem .6rem;
+  cursor: pointer;
+}
+.btn-reset:hover { filter: brightness(1.05); }
 </style>

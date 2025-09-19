@@ -43,49 +43,49 @@
   },
   {
     "name":"AuraGain, supraglottic airway, size 1, Paediatric, 2-5 kg",
-    "manufacturer":"Ambu\u00ae",
+    "manufacturer":"Ambu",
     "internal_mm":5.0,
     "notes":null
   },
   {
     "name":"AuraGain, supraglottic airway, size 1.5, Paediatric, 5-10 kg",
-    "manufacturer":"Ambu\u00ae",
+    "manufacturer":"Ambu",
     "internal_mm":7.0,
     "notes":null
   },
   {
     "name":"AuraGain, supraglottic airway, size 2, Paediatric, 10-20 kg",
-    "manufacturer":"Ambu\u00ae",
+    "manufacturer":"Ambu",
     "internal_mm":8.5,
     "notes":null
   },
   {
     "name":"AuraGain, supraglottic airway, size 2.5, Paediatric, 20-30 kg",
-    "manufacturer":"Ambu\u00ae",
+    "manufacturer":"Ambu",
     "internal_mm":10.0,
     "notes":null
   },
   {
     "name":"AuraGain, supraglottic airway, size 3, Adult, 30-50 kg",
-    "manufacturer":"Ambu\u00ae",
+    "manufacturer":"Ambu",
     "internal_mm":10.5,
     "notes":null
   },
   {
     "name":"AuraGain, supraglottic airway, size 4, Adult, 50-70 kg",
-    "manufacturer":"Ambu\u00ae",
+    "manufacturer":"Ambu",
     "internal_mm":12.0,
     "notes":null
   },
   {
     "name":"AuraGain, supraglottic airway, size 5, Adult, 70-100 kg",
-    "manufacturer":"Ambu\u00ae",
+    "manufacturer":"Ambu",
     "internal_mm":12.5,
     "notes":null
   },
   {
     "name":"AuraGain, supraglottic airway, size 6, Adult, >100 kg",
-    "manufacturer":"Ambu\u00ae",
+    "manufacturer":"Ambu",
     "internal_mm":12.5,
     "notes":null
   }
