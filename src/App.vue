@@ -1,18 +1,35 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 
-/* Data (loaded from /public) */
-const sads = ref([]);   // [{ name, manufacturer, size, internal_mm, notes }]
-const etts = ref([]);   // [{ name, manufacturer, internal_mm, external_mm, type?, notes }]
+/* Data */
+const sads = ref([]);   // from /public/sads.json (size is a string like "Size 4, ...")
+const etts = ref([]);   // from /public/etts.json  (expects {name, manufacturer, internal_mm, external_mm, type?})
 
-/* Two-step SAD selection */
-const selectedSADBrandKey = ref(null); // "<name>|<manufacturer>"
-const selectedSADSize     = ref(null); // numeric size ONLY (e.g. 3, 4, 5)
-
-/* Tolerance (mm) */
+/* UI state */
+const selectedSADBrandKey = ref(null); // "<canonName>|<canonManu>"
+const selectedSADSizeNum  = ref(null); // numeric size (e.g. 4) parsed from "Size 4, ..."
 const tolerance = ref(0.5);
 
-/* Load data */
+/* ---- utils to normalize data from your sads.json ---- */
+function parseSizeNumber(s) {
+  // "Size 4, Medium adult, 50-90 kg" -> 4
+  if (s == null) return null;
+  const m = String(s).match(/size\s*([0-9]+(?:\.[0-9]+)?)/i);
+  return m ? Number(m[1]) : null;
+}
+function canon(str) {
+  return String(str || "")
+    .replace(/[®™]/g, "")   // remove marks
+    .trim();
+}
+function canonManu(manu) {
+  // fix common misspelling "Intersurgcial" -> "Intersurgical"
+  const c = canon(manu);
+  if (/^intersurg/i.test(c) && c !== "Intersurgical") return "Intersurgical";
+  return c;
+}
+
+/* Load JSONs */
 onMounted(async () => {
   const [sadsRes, ettsRes] = await Promise.all([
     fetch("/sads.json"),
@@ -22,111 +39,97 @@ onMounted(async () => {
   etts.value = await ettsRes.json();
 });
 
-/* ---------- SAD model → sizes (numbers only) ---------- */
-
-/** Distinct SAD model/brand options */
+/* ---- Build brand list from sads.json (tolerant) ---- */
 const sadBrands = computed(() => {
   const map = new Map();
-  for (const s of sads.value) {
-    const key = `${(s.name || "").trim()}|${(s.manufacturer || "").trim()}`;
+  for (const row of sads.value) {
+    // Brand key = full canonical model name + canonical manufacturer
+    const name = canon(row.name);
+    const manu = canonManu(row.manufacturer);
+    const key  = `${name}|${manu}`;
     if (!map.has(key)) {
-      map.set(key, { key, name: s.name || "Unknown", manufacturer: s.manufacturer || "" });
+      // display name: shorten very long model labels to text before first comma
+      const shortName = name.split(",")[0].trim();
+      map.set(key, { key, name: shortName || name, manufacturer: manu });
     }
   }
   return Array.from(map.values()).sort((a,b) =>
-    (a.name||"").localeCompare(b.name||"") ||
-    (a.manufacturer||"").localeCompare(b.manufacturer||"")
+    a.name.localeCompare(b.name) || a.manufacturer.localeCompare(b.manufacturer)
   );
 });
 
-/** Available size NUMBERS for the selected brand/model (unique, sorted) */
-const sadSizeOptions = computed(() => {
+/* ---- Sizes available for selected brand (parsed numbers only) ---- */
+const brandEntries = computed(() => {
   if (!selectedSADBrandKey.value) return [];
-  const [n, m] = selectedSADBrandKey.value.split("|");
-  const sizes = new Set();
-  for (const s of sads.value) {
-    if ((s.name||"").trim()===n && (s.manufacturer||"").trim()===(m||"")) {
-      const sz = Number(s.size);
-      if (!Number.isNaN(sz)) sizes.add(sz);
-    }
+  const [wantName, wantManu] = selectedSADBrandKey.value.split("|");
+  return sads.value.filter(r => canon(r.name) === wantName && canonManu(r.manufacturer) === wantManu);
+});
+
+const sadSizeOptions = computed(() => {
+  const set = new Set();
+  for (const r of brandEntries.value) {
+    const n = parseSizeNumber(r.size);
+    if (n != null) set.add(n);
   }
-  return Array.from(sizes).sort((a,b)=>a-b);
+  return Array.from(set).sort((a,b)=>a-b);
 });
 
-/** The actual SAD entry for the selected brand + size (used to read ID etc.) */
+/* Auto-pick a size when brand changes (e.g. largest adult size) */
+watch([selectedSADBrandKey, sadSizeOptions], () => {
+  selectedSADSizeNum.value = sadSizeOptions.value.length ? sadSizeOptions.value.at(-1) : null;
+});
+
+/* The exact SAD row for brand + size (used for ID) */
 const selectedSADEntry = computed(() => {
-  if (!selectedSADBrandKey.value || selectedSADSize.value == null) return null;
-  const [n, m] = selectedSADBrandKey.value.split("|");
-  // pick the entry for that exact size; if multiple rows exist, take the first
-  return sads.value.find(s =>
-    (s.name||"").trim()===n &&
-    (s.manufacturer||"").trim()===(m||"") &&
-    Number(s.size) === Number(selectedSADSize.value)
-  ) || null;
+  if (!brandEntries.value.length || selectedSADSizeNum.value == null) return null;
+  return brandEntries.value.find(r => parseSizeNumber(r.size) === Number(selectedSADSizeNum.value)) || null;
 });
 
-/** Convenience values */
+/* Convenience */
 const sadID = computed(() => {
   if (!selectedSADEntry.value) return null;
   const v = Number(selectedSADEntry.value.internal_mm);
   return Number.isNaN(v) ? null : v;
 });
 
-/* ---------- Table: largest & 2nd largest per ETT type ---------- */
-
+/* -------- Table: largest & 2nd largest per ETT type (same behaviour) -------- */
 function getType(e){ return (e.type && String(e.type).trim()) || "ETT"; }
 
-/** Build rows:
- * - For each TYPE:
- *   - consider only entries that physically fit (gap > 0)
- *   - group by ETT ID (size) and choose the model with smallest OD at that size
- *   - take the two largest sizes (by ID)
- * - Colour based on tolerance (green/yellow). Non-fitting are hidden.
- */
 const tableRows = computed(() => {
   if (sadID.value == null) return [];
-
-  // collect candidates by type
   const byType = new Map();
+
   for (const e of etts.value) {
     const id = Number(e.internal_mm);
     const od = Number(e.external_mm);
     if (Number.isNaN(id) || Number.isNaN(od)) continue;
-
     const gap = sadID.value - od;
-    if (gap <= 0) continue; // not physically passable
+    if (gap <= 0) continue; // not passable
 
     const type = getType(e);
     if (!byType.has(type)) byType.set(type, []);
-    byType.get(type).push({
-      id, od, gap,
-      name: e.name,
-      manufacturer: e.manufacturer || ""
-    });
+    byType.get(type).push({ id, od, gap, name: e.name, manufacturer: e.manufacturer || "" });
   }
 
   const rows = [];
-
   for (const [type, entries] of byType.entries()) {
     if (!entries.length) continue;
 
-    // group by ETT ID (size)
+    // group by ETT ID and pick best model (min OD) for that ID
     const bySize = new Map();
     for (const ent of entries) {
       if (!bySize.has(ent.id)) bySize.set(ent.id, []);
       bySize.get(ent.id).push(ent);
     }
-
-    // choose best model per size (min OD -> max gap)
     const sizeBest = [];
     for (const [id, list] of bySize.entries()) {
-      const best = list.slice().sort((a,b) => a.od - b.od)[0];
+      const best = list.slice().sort((a,b)=>a.od-b.od)[0];
       sizeBest.push(best);
     }
 
-    // pick largest and second largest sizes
-    sizeBest.sort((a,b) => b.id - a.id || a.od - b.od);
-    const topTwo = sizeBest.slice(0, 2);
+    // take largest and second-largest sizes
+    sizeBest.sort((a,b)=> b.id - a.id || a.od - b.od);
+    const topTwo = sizeBest.slice(0,2);
 
     for (const r of topTwo) {
       rows.push({
@@ -140,7 +143,6 @@ const tableRows = computed(() => {
     }
   }
 
-  // order: by type, then ID desc, then OD asc
   return rows.sort((a,b) =>
     (a.type||"").localeCompare(b.type||"") ||
     b.id - a.id ||
@@ -160,13 +162,10 @@ const tableRows = computed(() => {
       Always check actual device fit before clinical use.
     </p>
 
-    <!-- 1) Select SAD model/brand -->
+    <!-- 1) SAD model/brand -->
     <div class="field">
       <label>Select SAD Model / Brand</label>
-      <select
-        v-model="selectedSADBrandKey"
-        @change="selectedSADSize = null"
-      >
+      <select v-model="selectedSADBrandKey">
         <option :value="null">— select model/brand —</option>
         <option v-for="b in sadBrands" :key="b.key" :value="b.key">
           {{ b.name }}<span v-if="b.manufacturer"> — {{ b.manufacturer }}</span>
@@ -174,38 +173,34 @@ const tableRows = computed(() => {
       </select>
     </div>
 
-    <!-- 2) Select SAD size (numbers only; disabled until model picked) -->
+    <!-- 2) SAD size (numeric, parsed from "Size X") -->
     <div class="field">
       <label>Select SAD Size</label>
-      <select v-model="selectedSADSize" :disabled="!selectedSADBrandKey">
+      <select v-model="selectedSADSizeNum" :disabled="!selectedSADBrandKey">
         <option :value="null">— select size —</option>
-        <option
-          v-for="sz in sadSizeOptions"
-          :key="sz"
-          :value="sz"
-        >
+        <option v-for="sz in sadSizeOptions" :key="sz" :value="sz">
           Size {{ sz }}
         </option>
       </select>
 
-      <!-- Calculation box (shows ID AFTER size selection) -->
+      <!-- Calc box -->
       <div v-if="selectedSADEntry" class="calc">
         <strong>
-          {{ selectedSADEntry.name }}
+          {{ selectedSADEntry.name.split(',')[0] }}
           <span v-if="selectedSADEntry.manufacturer">— {{ selectedSADEntry.manufacturer }}</span>
-          — size {{ selectedSADSize }} — ID {{ sadID?.toFixed(2) }} mm
+          — size {{ selectedSADSizeNum }} — ID {{ sadID?.toFixed(2) }} mm
         </strong>
       </div>
     </div>
 
-    <!-- Tolerance slider (below selectors) -->
+    <!-- Tolerance -->
     <div class="field" v-if="selectedSADEntry">
       <label>Tolerance / clearance (mm): {{ tolerance.toFixed(2) }}</label>
       <input type="range" min="0" max="2" step="0.1" v-model.number="tolerance" />
       <small>Green ≥ tolerance; Yellow &lt; tolerance. Non-fitting ETTs are hidden.</small>
     </div>
 
-    <!-- Results table: largest & 2nd largest per type -->
+    <!-- Results -->
     <table v-if="selectedSADEntry" class="results">
       <caption>Largest compatible ETT sizes per type (top 2)</caption>
       <thead>
@@ -265,17 +260,9 @@ small { color: #666; }
   border: 1px solid #e3e3e3;
 }
 
-.results {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 0.75rem;
-}
-.results caption {
-  text-align: left; font-weight: 600; margin-bottom: 0.35rem; color: #333;
-}
-.results th, .results td {
-  border: 1px solid #d9d9d9; padding: 0.55rem 0.75rem; text-align: left;
-}
+.results { width: 100%; border-collapse: collapse; margin-top: 0.75rem; }
+.results caption { text-align: left; font-weight: 600; margin-bottom: 0.35rem; color: #333; }
+.results th, .results td { border: 1px solid #d9d9d9; padding: 0.55rem 0.75rem; text-align: left; }
 .results th { background: #f5f5f5; }
 
 .results tr.fit   { background: #e9f7ef; }  /* green */

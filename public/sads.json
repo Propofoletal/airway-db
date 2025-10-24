@@ -1,92 +1,163 @@
 [
   {
-    "name":"i-gel\u00ae, supraglottic airway, size 1.0, neonate, 2-5 kg ",
+    "name":"i-gel\u00ae, Supraglottic Airway Device",
     "manufacturer":"Intersurgical",
+    "size":"Size 1.0, Neonate, 2-5 kg",
     "internal_mm":5.4,
     "notes":null
   },
   {
-    "name":"i-gel\u00ae, supraglottic airway, size 1.5, infant, 5-12 kg ",
+    "name":"i-gel\u00ae, Supraglottic Airway Device",
     "manufacturer":"Intersurgical",
+    "size":"Size 1.5, Infant, 5-12 kg",
     "internal_mm":6.8,
     "notes":null
   },
   {
-    "name":"i-gel\u00ae, supraglottic airway, size 2.0, small paediatric, 10-25 kg",
+    "name":"i-gel\u00ae, Supraglottic Airway Device",
     "manufacturer":"Intersurgical",
+    "size":"Size 2.0, Small paediatric, 10-25 kg",
     "internal_mm":8.7,
     "notes":null
   },
   {
-    "name":"i-gel\u00ae, supraglottic airway, size 2.5, large paediatric, 25-35 kg",
+    "name":"i-gel\u00ae, Supraglottic Airway Device",
     "manufacturer":"Intersurgical",
+    "size":"Size 2.5, Large paediatric, 25-35 kg",
     "internal_mm":10.1,
     "notes":null
   },
   {
-    "name":"i-gel\u00ae, supraglottic airway, size 3, small adult, 30-60 kg",
-    "manufacturer":"Intersurgcial",
+    "name":"i-gel\u00ae, Supraglottic Airway Device",
+    "manufacturer":"Intersurgical",
+    "size":"Size 3, Small adult, 30-60 kg",
     "internal_mm":11.1,
     "notes":null
   },
   {
-    "name":"i-gel\u00ae, supraglottic airway, size 4, medium adult, 50-90 kg",
+    "name":"i-gel\u00ae, Supraglottic Airway Device",
     "manufacturer":"Intersurgical",
+    "size":"Size 4, Medium adult, 50-90 kg",
     "internal_mm":12.3,
     "notes":null
   },
   {
-    "name":"i-gel\u00ae, supraglottic airway, size 5, large adult, 90+ kg\u00a0",
+    "name":"i-gel\u00ae, Supraglottic Airway Device",
     "manufacturer":"Intersurgical",
+    "size":"Size 5, Large adult, >90 kg",
     "internal_mm":13.1,
     "notes":null
   },
   {
-    "name":"AuraGain, supraglottic airway, size 1, Paediatric, 2-5 kg",
+    "name":"AuraGain, Supraglottic Airway Device device",
     "manufacturer":"Ambu",
+    "size":"Size 1, Paediatric, 2-5 kg",
     "internal_mm":5.0,
     "notes":null
   },
   {
-    "name":"AuraGain, supraglottic airway, size 1.5, Paediatric, 5-10 kg",
+    "name":"AuraGain, Supraglottic Airway Device",
     "manufacturer":"Ambu",
+    "size":"Size 1.5, Paediatric, 5-10 kg",
     "internal_mm":7.0,
     "notes":null
   },
   {
-    "name":"AuraGain, supraglottic airway, size 2, Paediatric, 10-20 kg",
+    "name":"AuraGain, Supraglottic Airway Device",
     "manufacturer":"Ambu",
+    "size":"Size 2, Paediatric, 10-20 kg",
     "internal_mm":8.5,
     "notes":null
   },
   {
-    "name":"AuraGain, supraglottic airway, size 2.5, Paediatric, 20-30 kg",
+    "name":"AuraGain, Supraglottic Airway Device",
     "manufacturer":"Ambu",
+    "size":"Size 2.5, Paediatric, 20-30 kg",
     "internal_mm":10.0,
     "notes":null
   },
   {
-    "name":"AuraGain, supraglottic airway, size 3, Adult, 30-50 kg",
+    "name":"AuraGain, Supraglottic Airway Device",
     "manufacturer":"Ambu",
+    "size":"Size 3, Adult, 30-50 kg",
     "internal_mm":10.5,
     "notes":null
   },
   {
-    "name":"AuraGain, supraglottic airway, size 4, Adult, 50-70 kg",
+    "name":"AuraGain, Supraglottic Airway Device",
     "manufacturer":"Ambu",
+    "size":"Size 4, Adult, 50-70 kg",
     "internal_mm":12.0,
     "notes":null
   },
   {
-    "name":"AuraGain, supraglottic airway, size 5, Adult, 70-100 kg",
+    "name":"AuraGain, Supraglottic Airway Device",
     "manufacturer":"Ambu",
+    "size":"Size 5, Adult, 70-100 kg",
     "internal_mm":12.5,
     "notes":null
   },
   {
-    "name":"AuraGain, supraglottic airway, size 6, Adult, >100 kg",
+    "name":"AuraGain, Supraglottic Airway Device",
     "manufacturer":"Ambu",
+    "size":"Size 6, Adult, >100 kg",
     "internal_mm":12.5,
+    "notes":null
+  },
+  {
+    "name":"air_Q\u00ae sp3G, Intubating Laryngeal Airway",
+    "manufacturer":"Fannin",
+    "size":"Size 0, <2 kg",
+    "internal_mm":3.0,
+    "notes":null
+  },
+  {
+    "name":"air_Q\u00ae sp3G, Intubating Laryngeal Airway",
+    "manufacturer":"Fannin",
+    "size":"Size 0.5, 2-4 kg",
+    "internal_mm":4.0,
+    "notes":null
+  },
+  {
+    "name":"air_Q\u00ae sp3G, Intubating Laryngeal Airway",
+    "manufacturer":"Fannin",
+    "size":"Size 1, 4-7 kg",
+    "internal_mm":4.5,
+    "notes":null
+  },
+  {
+    "name":"air_Q\u00ae sp3G, Intubating Laryngeal Airway",
+    "manufacturer":"Fannin",
+    "size":"Size 1.5, 7-17 kg",
+    "internal_mm":5.0,
+    "notes":null
+  },
+  {
+    "name":"air_Q\u00ae sp3G, Intubating Laryngeal Airway",
+    "manufacturer":"Fannin",
+    "size":"Size 2, 17-30 kg",
+    "internal_mm":5.5,
+    "notes":null
+  },
+  {
+    "name":"air_Q\u00ae sp3G, Intubating Laryngeal Airway",
+    "manufacturer":"Fannin",
+    "size":"Size 3, 30-60 kg",
+    "internal_mm":7.0,
+    "notes":null
+  },
+  {
+    "name":"air_Q\u00ae sp3G, Intubating Laryngeal Airway",
+    "manufacturer":"Fannin",
+    "size":"Size 4, 60-80 kg",
+    "internal_mm":8.0,
+    "notes":null
+  },
+  {
+    "name":"air_Q\u00ae sp3G, Intubating Laryngeal Airway",
+    "manufacturer":"Fannin",
+    "size":"Size 5, >80 kg",
+    "internal_mm":9.0,
     "notes":null
   }
 ]
