@@ -124,47 +124,59 @@ const tableRows = computed(() => {
       Always check actual device fit before clinical use.
     </p>
 
-    <!-- SAD selection -->
-    <div class="field">
-      <label>Select SAD Model / Brand</label>
-      <select v-model="selectedSADBrandKey" @change="selectedSADEntry = null">
-        <option :value="null">— select model/brand —</option>
-        <option v-for="b in sadBrands" :key="b.key" :value="b.key">
-          {{ b.name }}<span v-if="b.manufacturer"> — {{ b.manufacturer }}</span>
-        </option>
-      </select>
-    </div>
+<!-- 1) Select SAD model/brand -->
+<div class="field">
+  <label>Select SAD Model / Brand</label>
+  <select
+    v-model="selectedSADBrandKey"
+    @change="selectedSADEntry = null"
+  >
+    <option :value="null">— select model/brand —</option>
+    <option v-for="b in sadBrands" :key="b.key" :value="b.key">
+      {{ b.name }}<span v-if="b.manufacturer"> — {{ b.manufacturer }}</span>
+    </option>
+  </select>
+</div>
 
-    <div class="field" v-if="selectedSADBrandKey">
-      <label>Select SAD Size</label>
-      <select v-model="selectedSADEntry">
-        <option :value="null">— select size —</option>
-        <option
-          v-for="s in sadSizeEntries"
-          :key="s.name + s.internal_mm + (s.manufacturer || '')"
-          :value="s"
-        >
-          <template v-if="s.size">Size {{ s.size }} — </template>
-          ID {{ Number(s.internal_mm).toFixed(2) }} mm
-        </option>
-      </select>
-      <div v-if="selectedSADEntry" class="calc">
-        <strong>
-          {{ selectedSADEntry.name }}
-          <span v-if="selectedSADEntry.manufacturer">— {{ selectedSADEntry.manufacturer }}</span>
-          —
-          {{ sadSizeLabel }}
-          — ID {{ sadID?.toFixed(2) }} mm
-        </strong>
-      </div>
-    </div>
+<!-- 2) Select SAD size (disabled until model chosen) -->
+<div class="field">
+  <label>Select SAD Size</label>
+  <select
+    v-model="selectedSADEntry"
+    :disabled="!selectedSADBrandKey"
+  >
+    <option :value="null">— select size —</option>
+    <option
+      v-for="s in sadSizeEntries"
+      :key="s.name + (s.size??'') + s.internal_mm + (s.manufacturer||'')"
+      :value="s"
+    >
+      <template v-if="s.size !== undefined && s.size !== null && `${s.size}`.trim() !== ''">
+        Size {{ s.size }} — ID {{ Number(s.internal_mm).toFixed(2) }} mm
+      </template>
+      <template v-else>
+        ID {{ Number(s.internal_mm).toFixed(2) }} mm
+      </template>
+    </option>
+  </select>
 
-    <!-- Tolerance slider -->
-    <div class="field" v-if="selectedSADEntry">
-      <label>Tolerance / clearance (mm): {{ tolerance.toFixed(2) }}</label>
-      <input type="range" min="0" max="2" step="0.1" v-model.number="tolerance" />
-      <small>Adjust tolerance: increasing may reveal larger ETTs that now fit.</small>
-    </div>
+  <!-- Calculation box appears only after a size is picked -->
+  <div v-if="selectedSADEntry" class="calc">
+    <strong>
+      {{ selectedSADEntry.name }}
+      <span v-if="selectedSADEntry.manufacturer">— {{ selectedSADEntry.manufacturer }}</span>
+      — {{ sadSizeLabel }} — ID {{ sadID?.toFixed(2) }} mm
+    </strong>
+  </div>
+</div>
+
+<!-- 3) Tolerance slider shows only after size is set -->
+<div class="field" v-if="selectedSADEntry">
+  <label>Tolerance / clearance (mm): {{ tolerance.toFixed(2) }}</label>
+  <input type="range" min="0" max="2" step="0.1" v-model.number="tolerance" />
+  <small>Adjust tolerance: increasing may reveal larger ETTs that now fit.</small>
+</div>
+
 
     <!-- Dynamic table -->
     <transition-group name="fade" tag="table" v-if="selectedSADEntry" class="results">
