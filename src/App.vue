@@ -2,12 +2,12 @@
 import { ref, computed, onMounted } from "vue";
 
 /* Data (loaded from /public) */
-const sads = ref([]);   // [{ name, manufacturer, size?, internal_mm, notes }]
+const sads = ref([]);   // [{ name, manufacturer, size, internal_mm, notes }]
 const etts = ref([]);   // [{ name, manufacturer, internal_mm, external_mm, type?, notes }]
 
 /* Two-step SAD selection */
 const selectedSADBrandKey = ref(null); // "<name>|<manufacturer>"
-const selectedSADEntry    = ref(null); // chosen size entry (object)
+const selectedSADSize     = ref(null); // numeric size ONLY (e.g. 3, 4, 5)
 
 /* Tolerance (mm) */
 const tolerance = ref(0.5);
@@ -22,7 +22,7 @@ onMounted(async () => {
   etts.value = await ettsRes.json();
 });
 
-/* ---------- SAD model → sizes ---------- */
+/* ---------- SAD model → sizes (numbers only) ---------- */
 
 /** Distinct SAD model/brand options */
 const sadBrands = computed(() => {
@@ -39,17 +39,30 @@ const sadBrands = computed(() => {
   );
 });
 
-/** Size entries available for the selected model/brand */
-const sadSizeEntries = computed(() => {
+/** Available size NUMBERS for the selected brand/model (unique, sorted) */
+const sadSizeOptions = computed(() => {
   if (!selectedSADBrandKey.value) return [];
   const [n, m] = selectedSADBrandKey.value.split("|");
-  return sads.value
-    .filter(s => (s.name||"").trim()===n && (s.manufacturer||"").trim()===(m||""))
-    .sort((a,b) => {
-      const as = Number(a.size), bs = Number(b.size);
-      if (!Number.isNaN(as) && !Number.isNaN(bs)) return as - bs;
-      return Number(a.internal_mm) - Number(b.internal_mm);
-    });
+  const sizes = new Set();
+  for (const s of sads.value) {
+    if ((s.name||"").trim()===n && (s.manufacturer||"").trim()===(m||"")) {
+      const sz = Number(s.size);
+      if (!Number.isNaN(sz)) sizes.add(sz);
+    }
+  }
+  return Array.from(sizes).sort((a,b)=>a-b);
+});
+
+/** The actual SAD entry for the selected brand + size (used to read ID etc.) */
+const selectedSADEntry = computed(() => {
+  if (!selectedSADBrandKey.value || selectedSADSize.value == null) return null;
+  const [n, m] = selectedSADBrandKey.value.split("|");
+  // pick the entry for that exact size; if multiple rows exist, take the first
+  return sads.value.find(s =>
+    (s.name||"").trim()===n &&
+    (s.manufacturer||"").trim()===(m||"") &&
+    Number(s.size) === Number(selectedSADSize.value)
+  ) || null;
 });
 
 /** Convenience values */
@@ -57,12 +70,6 @@ const sadID = computed(() => {
   if (!selectedSADEntry.value) return null;
   const v = Number(selectedSADEntry.value.internal_mm);
   return Number.isNaN(v) ? null : v;
-});
-const sadSizeLabel = computed(() => {
-  if (!selectedSADEntry.value) return "";
-  const s = selectedSADEntry.value.size;
-  if (s !== undefined && s !== null && `${s}`.trim() !== "") return `size ${s}`;
-  return `ID ${Number(selectedSADEntry.value.internal_mm).toFixed(2)} mm`;
 });
 
 /* ---------- Table: largest & 2nd largest per ETT type ---------- */
@@ -133,7 +140,7 @@ const tableRows = computed(() => {
     }
   }
 
-  // Nice ordering: by type, then ID desc, then OD asc
+  // order: by type, then ID desc, then OD asc
   return rows.sort((a,b) =>
     (a.type||"").localeCompare(b.type||"") ||
     b.id - a.id ||
@@ -158,7 +165,7 @@ const tableRows = computed(() => {
       <label>Select SAD Model / Brand</label>
       <select
         v-model="selectedSADBrandKey"
-        @change="selectedSADEntry = null"
+        @change="selectedSADSize = null"
       >
         <option :value="null">— select model/brand —</option>
         <option v-for="b in sadBrands" :key="b.key" :value="b.key">
@@ -167,31 +174,26 @@ const tableRows = computed(() => {
       </select>
     </div>
 
-    <!-- 2) Select SAD size (filtered by model) -->
+    <!-- 2) Select SAD size (numbers only; disabled until model picked) -->
     <div class="field">
       <label>Select SAD Size</label>
-      <select v-model="selectedSADEntry" :disabled="!selectedSADBrandKey">
+      <select v-model="selectedSADSize" :disabled="!selectedSADBrandKey">
         <option :value="null">— select size —</option>
         <option
-          v-for="s in sadSizeEntries"
-          :key="s.name + (s.size??'') + s.internal_mm + (s.manufacturer||'')"
-          :value="s"
+          v-for="sz in sadSizeOptions"
+          :key="sz"
+          :value="sz"
         >
-          <template v-if="s.size !== undefined && s.size !== null && `${s.size}`.trim() !== ''">
-            Size {{ s.size }} — ID {{ Number(s.internal_mm).toFixed(2) }} mm
-          </template>
-          <template v-else>
-            ID {{ Number(s.internal_mm).toFixed(2) }} mm
-          </template>
+          Size {{ sz }}
         </option>
       </select>
 
-      <!-- Calculation box (appears after size selection) -->
+      <!-- Calculation box (shows ID AFTER size selection) -->
       <div v-if="selectedSADEntry" class="calc">
         <strong>
           {{ selectedSADEntry.name }}
           <span v-if="selectedSADEntry.manufacturer">— {{ selectedSADEntry.manufacturer }}</span>
-          — {{ sadSizeLabel }} — ID {{ sadID?.toFixed(2) }} mm
+          — size {{ selectedSADSize }} — ID {{ sadID?.toFixed(2) }} mm
         </strong>
       </div>
     </div>
