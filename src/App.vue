@@ -186,7 +186,7 @@ const tableRows = computed(() => {
       <select v-model="selectedSADBrandKey">
         <option :value="null">— select model/brand —</option>
         <option v-for="b in sadBrands" :key="b.key" :value="b.key">
-          {{ b.name }}<span v-if="b.manufacturer"> — {{ b.manufacturer }}</span>
+          {{ b.name }}<span v-if="b.manufacturer">, {{ b.manufacturer }}</span>
         </option>
       </select>
     </div>
@@ -203,8 +203,8 @@ const tableRows = computed(() => {
       <div v-if="selectedSADEntry" class="calc">
         <strong>
           {{ displayName(selectedSADEntry.name) }}
-          <span v-if="selectedSADEntry.manufacturer"> <br> {{ displayManu(selectedSADEntry.manufacturer) }}</span>
-          </br> size {{ selectedSADSizeNum }} </br> SAD Internal Diameter {{ sadID?.toFixed(2) }} mm
+          <span v-if="selectedSADEntry.manufacturer"></span>
+          </br> size {{ selectedSADSizeNum }} </br> Internal Diameter {{ sadID?.toFixed(2) }} mm
         </strong>
       </div>
     </div>
