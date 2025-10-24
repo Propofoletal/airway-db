@@ -203,8 +203,10 @@ const tableRows = computed(() => {
       <div v-if="selectedSADEntry" class="calc">
         <strong>
           {{ displayName(selectedSADEntry.name) }}
-          // <span v-if="selectedSADEntry.manufacturer"></span>
-          </br> Size {{ selectedSADSizeNum }} </br> Internal Diameter {{ sadID?.toFixed(2) }} mm
+          
+
+          </br> 
+          Size {{ selectedSADSizeNum }} Internal Diameter {{ sadID?.toFixed(2) }} mm
         </strong>
       </div>
     </div>
