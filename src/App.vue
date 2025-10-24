@@ -204,7 +204,7 @@ const tableRows = computed(() => {
         <strong>
           {{ displayName(selectedSADEntry.name) }}
           </br> 
-          Size {{ selectedSADSizeNum }} Internal Diameter {{ sadID?.toFixed(2) }} mm <br
+          Size {{ selectedSADSizeNum }} Internal Diameter {{ sadID?.toFixed(2) }} mm <br />
         </strong>
       </div>
     </div>
