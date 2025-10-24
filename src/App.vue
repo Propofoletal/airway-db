@@ -1,14 +1,14 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 
-const sads = ref([]);   // [{ name, manufacturer, internal_mm, notes }]
-const etts = ref([]);   // [{ name, manufacturer, internal_mm, external_mm, notes, type? }]
+const sads = ref([]);   // [{ name, manufacturer, internal_mm, size?, notes }]
+const etts = ref([]);   // [{ name, manufacturer, internal_mm, external_mm, type?, notes }]
 
-/* SAD selection (two-step) */
-const selectedSADBrandKey = ref(null); // brand/model key
-const selectedSADSize = ref(null);     // a specific SAD entry (object with internal_mm)
+/* Selections */
+const selectedSADBrandKey = ref(null); // "<name>|<manufacturer>"
+const selectedSADEntry = ref(null);    // full SAD row (chosen size/entry)
 
-/* Tolerance slider (mm) — placed BELOW selectors per your choice (B) */
+/* Tolerance slider (mm) */
 const tolerance = ref(0.5);
 
 /* Load data */
@@ -21,104 +21,121 @@ onMounted(async () => {
   etts.value = await ettsRes.json();
 });
 
-/* ---- Helpers for SAD brand → sizes ---- */
+/* --------- SAD model → sizes ---------- */
 
-/** Unique SAD brands/models (by name + manufacturer) */
+/** Distinct brand/model options */
 const sadBrands = computed(() => {
   const map = new Map();
   for (const s of sads.value) {
-    const key = `${(s.name || "").trim()}|${(s.manufacturer || "").trim()}`;
+    const key = `${(s.name||"").trim()}|${(s.manufacturer||"").trim()}`;
     if (!map.has(key)) {
-      map.set(key, {
-        key,
-        name: s.name || "Unknown",
-        manufacturer: s.manufacturer || "",
-      });
+      map.set(key, { key, name: s.name || "Unknown", manufacturer: s.manufacturer || "" });
     }
   }
-  // sort alphabetically by name then manufacturer
-  return Array.from(map.values()).sort((a, b) =>
-    (a.name || "").localeCompare(b.name || "") ||
-    (a.manufacturer || "").localeCompare(b.manufacturer || "")
+  return Array.from(map.values()).sort((a,b) =>
+    (a.name||"").localeCompare(b.name||"") ||
+    (a.manufacturer||"").localeCompare(b.manufacturer||"")
   );
 });
 
-/** Sizes (entries) available for the selected brand/model */
-const sadSizesForBrand = computed(() => {
+/** Size entries for selected model */
+const sadSizeEntries = computed(() => {
   if (!selectedSADBrandKey.value) return [];
-  const [brandName, brandManu] = selectedSADBrandKey.value.split("|");
-  return sads.value
-    .filter(
-      s =>
-        (s.name || "").trim() === brandName &&
-        (s.manufacturer || "").trim() === (brandManu || "")
-    )
-    .sort((a, b) => Number(a.internal_mm) - Number(b.internal_mm));
+  const [n, m] = selectedSADBrandKey.value.split("|");
+  const list = sads.value.filter(s => (s.name||"").trim()===n && (s.manufacturer||"").trim()===(m||""));
+  // sort by "size" if present, else by internal_mm
+  return list.sort((a,b) => {
+    const as = Number(a.size), bs = Number(b.size);
+    if (!Number.isNaN(as) && !Number.isNaN(bs)) return as - bs;
+    return Number(a.internal_mm) - Number(b.internal_mm);
+  });
 });
 
-/** Convenience: selected SAD ID (internal diameter) */
-const selectedSAD_ID = computed(() => {
-  if (!selectedSADSize.value) return null;
-  const v = Number(selectedSADSize.value.internal_mm);
+/** Convenience values for UI */
+const sadID = computed(() => {
+  if (!selectedSADEntry.value) return null;
+  const v = Number(selectedSADEntry.value.internal_mm);
   return Number.isNaN(v) ? null : v;
 });
+const sadSizeLabel = computed(() => {
+  if (!selectedSADEntry.value) return "";
+  const s = selectedSADEntry.value.size;
+  if (s !== undefined && s !== null && `${s}`.trim() !== "") return `size ${s}`;
+  // fallback when no "size" field in JSON
+  return `ID ${Number(selectedSADEntry.value.internal_mm).toFixed(2)} mm`;
+});
 
-/* ---- Build table of largest-fitting ETT per model ---- */
+/* --------- Build table: largest & 2nd largest per ETT type ---------- */
 
-/** Group ETTs by model/manufacturer; return map key → array of sizes (entries) */
-function groupETTsByModel(ettsArr) {
-  const map = new Map();
-  for (const e of ettsArr) {
-    const key = `${(e.name || "").trim()}|${(e.manufacturer || "").trim()}`;
-    if (!map.has(key)) map.set(key, []);
-    map.get(key).push(e);
+/** group by ETT type (default "ETT") */
+function getType(e){ return (e.type && String(e.type).trim()) || "ETT"; }
+
+/** For each TYPE:
+ *  - find all entries that fit (gap > 0)
+ *  - group by ETT size (ID) so multiple models at the same size compete
+ *  - for each size, pick the model with the smallest OD (best chance)
+ *  - pick top 2 sizes (largest IDs)
+ */
+const tableRows = computed(() => {
+  if (sadID.value == null) return [];
+
+  // collect by type
+  const byType = new Map();
+  for (const e of etts.value) {
+    const id = Number(e.internal_mm);
+    const od = Number(e.external_mm);
+    if (Number.isNaN(id) || Number.isNaN(od)) continue;
+
+    const gap = sadID.value - od;
+    if (gap <= 0) continue; // doesn't fit
+
+    const t = getType(e);
+    if (!byType.has(t)) byType.set(t, []);
+    byType.get(t).push({ id, od, gap, name: e.name, manufacturer: e.manufacturer || "" });
   }
-  return map;
-}
 
-/** Rows for table: only the largest ID that fits per ETT model */
-const largestFitRows = computed(() => {
-  const sadID = selectedSAD_ID.value;
-  if (sadID == null) return [];
-
-  const modelGroups = groupETTsByModel(etts.value);
   const rows = [];
 
-  for (const [key, entries] of modelGroups.entries()) {
-    // For this model, find all entries that physically fit at all (gap > 0)
-    const fitEntries = entries
-      .map(e => {
-        const id = Number(e.internal_mm);
-        const od = Number(e.external_mm);
-        if (Number.isNaN(id) || Number.isNaN(od)) return null;
-        const gap = sadID - od;
-        if (gap <= 0) return null; // won't fit
-        return { id, od, gap, type: e.type || "ETT", name: e.name, manufacturer: e.manufacturer || "", notes: e.notes || "" };
-      })
-      .filter(Boolean);
+  for (const [type, entries] of byType.entries()) {
+    if (!entries.length) continue;
 
-    if (!fitEntries.length) continue;
+    // group by ETT ID size
+    const bySize = new Map();
+    for (const ent of entries) {
+      if (!bySize.has(ent.id)) bySize.set(ent.id, []);
+      bySize.get(ent.id).push(ent);
+    }
 
-    // Choose the largest ID that still fits
-    fitEntries.sort((a, b) => b.id - a.id || a.od - b.od);
-    const best = fitEntries[0];
+    // for each size, choose the best model (min OD → max gap)
+    const sizeBest = [];
+    for (const [id, list] of bySize.entries()) {
+      const best = list.slice().sort((a,b) => a.od - b.od)[0];
+      sizeBest.push(best);
+    }
 
-    // Colour logic: green if gap ≥ tolerance; yellow if 0 < gap < tolerance
-    const state = best.gap >= tolerance.value ? "fit" : "tight";
+    // pick largest and second largest sizes
+    sizeBest.sort((a,b) => b.id - a.id || a.od - b.od);
+    const topTwo = sizeBest.slice(0, 2);
 
-    rows.push({
-      id: best.id,
-      type: best.type,
-      od: best.od,
-      model: best.name,
-      manufacturer: best.manufacturer,
-      state,
-    });
+    // push rows with colouring rule (green = gap >= tolerance, yellow = gap < tolerance)
+    for (const r of topTwo) {
+      rows.push({
+        id: r.id,
+        type,
+        od: r.od,
+        model: r.name,
+        manufacturer: r.manufacturer,
+        state: r.gap >= tolerance.value ? "fit" : "tight"
+      });
+    }
   }
 
-  // Sort rows by ETT size (ID) desc, then OD asc, then model
-  rows.sort((a, b) => b.id - a.id || a.od - b.od || (a.model || "").localeCompare(b.model || ""));
-  return rows;
+  // Sort table nicely: by type, then ID desc, then OD asc
+  return rows.sort((a,b) =>
+    (a.type||"").localeCompare(b.type||"") ||
+    b.id - a.id ||
+    a.od - b.od
+  );
 });
 </script>
 
@@ -133,52 +150,60 @@ const largestFitRows = computed(() => {
       Always check actual device fit before clinical use.
     </p>
 
-    <!-- Step 1: Select SAD brand/model -->
+    <!-- 1) Select SAD model/brand -->
     <div class="field">
-      <label>Select SAD Brand / Model</label>
+      <label>Select SAD Model / Brand</label>
       <select
         v-model="selectedSADBrandKey"
-        @change="selectedSADSize = null"
+        @change="selectedSADEntry = null"
       >
-        <option :value="null">— select brand/model —</option>
-        <option
-          v-for="b in sadBrands"
-          :key="b.key"
-          :value="b.key"
-        >
+        <option :value="null">— select model/brand —</option>
+        <option v-for="b in sadBrands" :key="b.key" :value="b.key">
           {{ b.name }}<span v-if="b.manufacturer"> — {{ b.manufacturer }}</span>
         </option>
       </select>
     </div>
 
-    <!-- Step 2: Select SAD size (filtered by brand) -->
+    <!-- 2) Select SAD size (filtered) -->
     <div class="field" v-if="selectedSADBrandKey">
       <label>Select SAD Size</label>
-      <select v-model="selectedSADSize">
+      <select v-model="selectedSADEntry">
         <option :value="null">— select size —</option>
         <option
-          v-for="s in sadSizesForBrand"
-          :key="s.name + s.internal_mm + (s.manufacturer||'')"
+          v-for="s in sadSizeEntries"
+          :key="s.name + (s.size??'') + s.internal_mm + (s.manufacturer||'')"
           :value="s"
         >
-          ID {{ Number(s.internal_mm).toFixed(2) }} mm
+          <template v-if="s.size !== undefined && s.size !== null && `${s.size}`.trim() !== ''">
+            Size {{ s.size }} — ID {{ Number(s.internal_mm).toFixed(2) }} mm
+          </template>
+          <template v-else>
+            ID {{ Number(s.internal_mm).toFixed(2) }} mm
+          </template>
         </option>
       </select>
-      <p v-if="selectedSAD_ID !== null" class="sad-id">
-        Selected SAD internal diameter: <strong>{{ selectedSAD_ID.toFixed(2) }} mm</strong>
-      </p>
+
+      <!-- 4) Calculation box -->
+      <div v-if="selectedSADEntry" class="calc">
+        <strong>
+          {{ selectedSADEntry.name }}
+          <span v-if="selectedSADEntry.manufacturer">— {{ selectedSADEntry.manufacturer }}</span>
+          —
+          {{ sadSizeLabel }}
+        </strong>
+      </div>
     </div>
 
-    <!-- Tolerance slider (placed BELOW selectors) -->
-    <div class="field" v-if="selectedSADSize">
+    <!-- 3) Tolerance slider (after selection) -->
+    <div class="field" v-if="selectedSADEntry">
       <label>Tolerance / clearance (mm): {{ tolerance.toFixed(2) }}</label>
       <input type="range" min="0" max="1.5" step="0.1" v-model.number="tolerance" />
-      <small>Green ≥ tolerance. Yellow &lt; tolerance. Rows that don't fit are hidden.</small>
+      <small>Green ≥ tolerance; Yellow &lt; tolerance. Non-fitting ETTs are hidden.</small>
     </div>
 
-    <!-- Results table -->
-    <table v-if="selectedSADSize" class="results">
-      <caption>Showing largest compatible ETT per model</caption>
+    <!-- 5) Table: largest & second-largest per ETT type -->
+    <table v-if="selectedSADEntry" class="results">
+      <caption>Largest compatible ETT sizes per type (top 2)</caption>
       <thead>
         <tr>
           <th>ETT size (ID mm)</th>
@@ -188,11 +213,7 @@ const largestFitRows = computed(() => {
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="row in largestFitRows"
-          :key="row.model + row.manufacturer + row.id"
-          :class="row.state"
-        >
+        <tr v-for="row in tableRows" :key="row.type + row.model + row.id + row.od" :class="row.state">
           <td>{{ Number(row.id).toFixed(1) }}</td>
           <td>{{ row.type }}</td>
           <td>{{ row.od.toFixed(2) }}</td>
@@ -204,7 +225,7 @@ const largestFitRows = computed(() => {
       </tbody>
     </table>
 
-    <p v-if="selectedSADSize && largestFitRows.length === 0" class="no-results">
+    <p v-if="selectedSADEntry && tableRows.length === 0" class="no-results">
       No compatible ETTs found for this SAD at the current tolerance.
     </p>
   </main>
@@ -230,7 +251,14 @@ h1 { font-size: 1.6rem; margin-bottom: 1rem; }
 .field label { display: block; font-weight: 600; margin-bottom: 0.4rem; }
 select { width: 100%; padding: 0.45rem; }
 small { color: #666; }
-.sad-id { margin-top: 0.35rem; color: #333; }
+
+.calc {
+  margin-top: 0.6rem;
+  background: #f9f9f9;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #e3e3e3;
+}
 
 .results {
   width: 100%;
@@ -238,15 +266,10 @@ small { color: #666; }
   margin-top: 0.75rem;
 }
 .results caption {
-  text-align: left;
-  font-weight: 600;
-  margin-bottom: 0.35rem;
-  color: #333;
+  text-align: left; font-weight: 600; margin-bottom: 0.35rem; color: #333;
 }
 .results th, .results td {
-  border: 1px solid #d9d9d9;
-  padding: 0.55rem 0.75rem;
-  text-align: left;
+  border: 1px solid #d9d9d9; padding: 0.55rem 0.75rem; text-align: left;
 }
 .results th { background: #f5f5f5; }
 
