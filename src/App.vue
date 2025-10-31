@@ -8,7 +8,9 @@ const etts = ref([]);   // [{ name, manufacturer, internal_mm, external_mm, type
 /* UI state */
 const selectedSADBrandKey = ref(null); // "<canonName>|<canonManu>"
 const selectedSADSizeNum  = ref(null); // numeric size (e.g. 4)
-const tolerance = ref(0.5);
+const MIN_TOLERANCE_MM = 0.5;
+const tolerance = ref(MIN_TOLERANCE_MM);
+const loadError = ref(null);
 
 /* ---- Normalisation & parsing (dedupe brand names) ----
    Past files included things like "AuraGain, ... device" and ® symbols, which must be normalised,
@@ -44,12 +46,24 @@ function parseSizeNumber(val) {
 
 /* Load */
 onMounted(async () => {
-  const [sadsRes, ettsRes] = await Promise.all([
-    fetch("/sads.json"),
-    fetch("/etts.json"),
-  ]);
-  sads.value = await sadsRes.json();
-  etts.value = await ettsRes.json();
+  try {
+    const baseUrl = new URL(import.meta.env.BASE_URL || "/", window.location.origin);
+    const [sadsRes, ettsRes] = await Promise.all([
+      fetch(new URL("sads.json", baseUrl)),
+      fetch(new URL("etts.json", baseUrl)),
+    ]);
+    if (!sadsRes.ok || !ettsRes.ok) {
+      throw new Error(`HTTP ${sadsRes.status}/${ettsRes.status}`);
+    }
+    sads.value = await sadsRes.json();
+    etts.value = await ettsRes.json();
+    loadError.value = null;
+  } catch (err) {
+    console.error("Failed to load SAD/ETT data", err);
+    loadError.value = "Unable to load device data. Please refresh or try again later.";
+    sads.value = [];
+    etts.value = [];
+  }
 });
 
 /* Brand list (strict dedupe) */
@@ -97,6 +111,10 @@ watch([selectedSADBrandKey, sadSizeOptions], () => {
   selectedSADSizeNum.value = sadSizeOptions.value.length ? sadSizeOptions.value.at(-1) : null;
 });
 
+/* Clamp tolerance to minimum clearance */
+watch(tolerance, (val) => {
+  if (val < MIN_TOLERANCE_MM) tolerance.value = MIN_TOLERANCE_MM;
+});
 /* Selected entry (brand + size) -> gives us ID for maths */
 const selectedSADEntry = computed(() => {
   if (!brandEntries.value.length || selectedSADSizeNum.value == null) return null;
@@ -123,7 +141,7 @@ const tableRows = computed(() => {
     if (Number.isNaN(id) || Number.isNaN(od)) continue;
 
     const gap = sadID.value - od;
-    if (gap <= 0) continue; // not passable
+    if (gap < 0) continue; // OD larger than SAD ID
 
     const t = getType(e);
     if (!byType.has(t)) byType.set(t, []);
@@ -180,6 +198,8 @@ const tableRows = computed(() => {
       Always check actual device fit before clinical use.
     </p>
 
+    <p v-if="loadError" class="error">{{ loadError }}</p>
+
     <!-- 1) SAD model/brand -->
     <div class="field">
       <label>Select SAD Model / Brand</label>
@@ -211,8 +231,8 @@ const tableRows = computed(() => {
     <!-- Tolerance slider -->
     <div class="field" v-if="selectedSADEntry">
       <label>Tolerance / clearance (mm): {{ tolerance.toFixed(2) }}</label>
-      <input type="range" min="0" max="2" step="0.1" v-model.number="tolerance" />
-      <small>Green ≥ tolerance; Yellow &lt; tolerance. Non-fitting ETTs are hidden.</small>
+      <input type="range" :min="MIN_TOLERANCE_MM" max="2" step="0.1" v-model.number="tolerance" />
+      <small>Green ≥ tolerance; Yellow &lt; tolerance (minimum 0.5 mm). Non-fitting ETTs are hidden.</small>
     </div>
 
     <!-- Results -->
@@ -257,6 +277,15 @@ h1 { font-size: 1.6rem; margin-bottom: 1rem; }
   color: #b71c1c;
   background: #fdecea;
   border-left: 4px solid #e74c3c;
+  padding: 0.6rem 0.9rem;
+  border-radius: 4px;
+}
+
+.error {
+  margin: 0.75rem 0;
+  color: #8b0000;
+  background: #fdecea;
+  border-left: 4px solid #c62828;
   padding: 0.6rem 0.9rem;
   border-radius: 4px;
 }
