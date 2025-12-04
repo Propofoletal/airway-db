@@ -9,7 +9,8 @@ const etts = ref([]);   // [{ name, manufacturer, internal_mm, external_mm, type
 const selectedSADBrandKey = ref(null); // "<canonName>|<canonManu>"
 const selectedSADSizeNum  = ref(null); // numeric size (e.g. 4)
 const MIN_TOLERANCE_MM = 0.5;
-const tolerance = ref(MIN_TOLERANCE_MM);
+const DEFAULT_TOLERANCE_MM = 1;
+const tolerance = ref(DEFAULT_TOLERANCE_MM);
 const selectedETTNameKeys = ref([]);
 const loadError = ref(null);
 
@@ -219,7 +220,7 @@ const tableRows = computed(() => {
     <h1>Airway Compatibility — SAD → ETT</h1>
 
     <p class="disclaimer">
-      ⚠️ This app is intended for estimation only.
+      This app is intended for estimation only.
       Data are based on information provided by manufacturers.
       Always check device specifications and confirm compatibility.
       Always check actual device fit before clinical use.
@@ -299,7 +300,6 @@ const tableRows = computed(() => {
           <th>ETT size (ID mm)</th>
           <th>Type</th>
           <th>External Diameter (OD mm)</th>
-          <th>Manufacturer</th>
         </tr>
       </thead>
       <tbody>
@@ -308,7 +308,6 @@ const tableRows = computed(() => {
           <td>{{ Number(row.id).toFixed(1) }}</td>
           <td>{{ row.type }}</td>
           <td>{{ row.od.toFixed(2) }}</td>
-          <td>{{ row.manufacturer || "—" }}</td>
         </tr>
       </tbody>
     </table>
