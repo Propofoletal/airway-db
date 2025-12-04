@@ -281,14 +281,6 @@
     "external_mm": 6.1
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Fornia",
-    "internal_mm": 4.5,
-    "external_mm": 7.1,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
-  },
-  {
     "name": "Fornia Cuffed ETT",
     "internal_mm": 5.0,
     "external_mm": 7.6
