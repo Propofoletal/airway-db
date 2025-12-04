@@ -1,442 +1,626 @@
 [
   {
-    "name":"Tracheal Tube, Oral\/Nasal, Siliconised",
-    "manufacturer":"Smiths Medical, Portex",
-    "internal_mm":2.5,
-    "external_mm":3.5,
-    "cuff_mm":null,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "R\u00fcschelit",
+    "internal_mm": 3.0,
+    "external_mm": 5.5,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"ETT, Paediatric, Microcuff Endotracheal Tube, Oral\/Nasal Magill",
-    "manufacturer":"Avanos",
-    "internal_mm":3.0,
-    "external_mm":4.3,
-    "cuff_mm":10.0,
-    "notes":"Recommended age: term \u2265 3kg up to < 8 months"
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "R\u00fcschelit",
+    "internal_mm": 3.5,
+    "external_mm": 5.9,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschelit Super Safety Clear, Tracheal tube, oral\/nasal, cuffed",
-    "manufacturer":"Teleflex",
-    "internal_mm":3.0,
-    "external_mm":5.0,
-    "cuff_mm":8.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "R\u00fcschelit",
+    "internal_mm": 4.0,
+    "external_mm": 6.6,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschelit Preformed Tracheal Tube, Tracheal Tube (oral, preformed, without cuff)",
-    "manufacturer":"Teleflex",
-    "internal_mm":3.5,
-    "external_mm":4.7,
-    "cuff_mm":null,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "R\u00fcschelit",
+    "internal_mm": 4.5,
+    "external_mm": 7.0,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Tracheal Tube, Oral\/Nasal, Siliconised",
-    "manufacturer":"Smiths Medical, Portex",
-    "internal_mm":3.5,
-    "external_mm":4.8,
-    "cuff_mm":null,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "R\u00fcschelit",
+    "internal_mm": 5.0,
+    "external_mm": 7.1,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"ProAct Pro-Breathe Oral Tracheal Tube, Tracheal Tube (Oral South Cuffed)",
-    "manufacturer":"ProAct",
-    "internal_mm":3.5,
-    "external_mm":4.9,
-    "cuff_mm":12.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "R\u00fcschelit",
+    "internal_mm": 5.5,
+    "external_mm": 7.3,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"ETT, Paediatric, Microcuff Endotracheal Tube, Oral\/Nasal Magill",
-    "manufacturer":"Avanos",
-    "internal_mm":3.5,
-    "external_mm":5.0,
-    "cuff_mm":12.0,
-    "notes":"Recommended age: 8 months to < 2 years"
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "R\u00fcschelit",
+    "internal_mm": 6.0,
+    "external_mm": 7.8,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschelit Super Safety Clear, Tracheal tube, oral\/nasal, cuffed",
-    "manufacturer":"Teleflex",
-    "internal_mm":3.5,
-    "external_mm":5.3,
-    "cuff_mm":8.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "R\u00fcschelit",
+    "internal_mm": 6.5,
+    "external_mm": 9.1,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschFlex Armoured Tracheal Tube, Oral\/Nasal, with cuff, Murphy eye",
-    "manufacturer":"Teleflex",
-    "internal_mm":3.5,
-    "external_mm":5.8,
-    "cuff_mm":9.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "R\u00fcschelit",
+    "internal_mm": 7.0,
+    "external_mm": 9.9,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschelit Preformed Tracheal Tube, Tracheal Tube (oral, preformed, without cuff)",
-    "manufacturer":"Teleflex",
-    "internal_mm":4.0,
-    "external_mm":5.3,
-    "cuff_mm":null,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "R\u00fcschelit",
+    "internal_mm": 7.5,
+    "external_mm": 11.5,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Portex Tracheal Tube, Oral\/Nasal Siliconised",
-    "manufacturer":"Smiths Medical, Portex",
-    "internal_mm":4.0,
-    "external_mm":5.5,
-    "cuff_mm":null,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "R\u00fcschelit",
+    "internal_mm": 8.0,
+    "external_mm": 11.8,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"ETT, Paediatric, Microcuff Endotracheal Tube, Oral\/Nasal Magill",
-    "manufacturer":"Avanos",
-    "internal_mm":4.0,
-    "external_mm":5.6,
-    "cuff_mm":12.0,
-    "notes":"Recommended age: 2 to < 4 years"
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "R\u00fcschelit",
+    "internal_mm": 8.5,
+    "external_mm": 12.3,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Tracheal Tube, Oral\/Nasal, Super Safety Clear, Cuffed",
-    "manufacturer":"Teleflex",
-    "internal_mm":4.0,
-    "external_mm":6.0,
-    "cuff_mm":11.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Shiley",
+    "internal_mm": 3.0,
+    "external_mm": 4.7,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschFlex Armoured Tracheal Tube, Oral\/Nasal, with cuff, Murphy eye",
-    "manufacturer":"Teleflex",
-    "internal_mm":4.0,
-    "external_mm":6.3,
-    "cuff_mm":9.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Shiley",
+    "internal_mm": 3.5,
+    "external_mm": 5.4,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschelit Preformed Tracheal Tube, Tracheal Tube (oral, preformed, without cuff)",
-    "manufacturer":"Teleflex",
-    "internal_mm":4.5,
-    "external_mm":6.0,
-    "cuff_mm":null,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Shiley",
+    "internal_mm": 4.0,
+    "external_mm": 5.9,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Tracheal Tube, Oral\/Nasal, Siliconised",
-    "manufacturer":"Smiths Medical, Portex",
-    "internal_mm":4.5,
-    "external_mm":6.2,
-    "cuff_mm":null,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Shiley",
+    "internal_mm": 4.5,
+    "external_mm": 6.7,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Tracheal Tube, Oral\/Nasal, Super Safety Clear, Cuffed",
-    "manufacturer":"Teleflex",
-    "internal_mm":4.5,
-    "external_mm":6.3,
-    "cuff_mm":11.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Shiley",
+    "internal_mm": 5.0,
+    "external_mm": 7.9,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschelit, Tracheal Tube (Oral Preformed, Murphy Eye, Cuffed)",
-    "manufacturer":"Teleflex",
-    "internal_mm":4.5,
-    "external_mm":6.3,
-    "cuff_mm":13.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Shiley",
+    "internal_mm": 5.5,
+    "external_mm": 8.2,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"ETT, Paediatric, Microcuff Endotracheal Tube, Oral\/Nasal Magill",
-    "manufacturer":"Avanos",
-    "internal_mm":4.5,
-    "external_mm":6.3,
-    "cuff_mm":14.0,
-    "notes":"Recommended age: 4 to < 6 years"
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Shiley",
+    "internal_mm": 6.0,
+    "external_mm": 8.3,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschFlex Armoured Tracheal Tube, Oral\/Nasal, with cuff, Murphy eye",
-    "manufacturer":"Teleflex",
-    "internal_mm":4.5,
-    "external_mm":6.8,
-    "cuff_mm":13.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Shiley",
+    "internal_mm": 6.5,
+    "external_mm": 9.2,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Shiley Laser Oral Tracheal Tube Dual Cuffed",
-    "manufacturer":"Covidien",
-    "internal_mm":4.5,
-    "external_mm":7.0,
-    "cuff_mm":null,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Shiley",
+    "internal_mm": 7.0,
+    "external_mm": 9.8,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Tracheal Tube, Oral\/Nasal, Super Safety Clear, Cuffed",
-    "manufacturer":"Teleflex",
-    "internal_mm":5.0,
-    "external_mm":6.7,
-    "cuff_mm":13.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Shiley",
+    "internal_mm": 7.5,
+    "external_mm": 10.8,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschelit Preformed Tracheal Tube, Tracheal Tube (oral, preformed, without cuff)",
-    "manufacturer":"Teleflex",
-    "internal_mm":5.0,
-    "external_mm":6.7,
-    "cuff_mm":null,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Shiley",
+    "internal_mm": 8.0,
+    "external_mm": 12.0,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Shiley Microlaryngeal Oral\/Nasal Tracheal Tube Cuffed",
-    "manufacturer":"Covidien",
-    "internal_mm":5.0,
-    "external_mm":6.9,
-    "cuff_mm":27.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Shiley",
+    "internal_mm": 8.5,
+    "external_mm": 12.1,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschFlex Armoured Tracheal Tube, Oral\/Nasal, with cuff, Murphy eye",
-    "manufacturer":"Teleflex",
-    "internal_mm":5.0,
-    "external_mm":7.3,
-    "cuff_mm":21.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Curity",
+    "internal_mm": 4.0,
+    "external_mm": 5.9,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Shiley Laser Oral Tracheal Tube Dual Cuffed",
-    "manufacturer":"Covidien",
-    "internal_mm":5.0,
-    "external_mm":7.5,
-    "cuff_mm":null,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Curity",
+    "internal_mm": 5.0,
+    "external_mm": 7.7,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschelit, Tracheal Tube (Oral Preformed, Murphy Eye, Cuffed)",
-    "manufacturer":"Teleflex",
-    "internal_mm":5.5,
-    "external_mm":7.3,
-    "cuff_mm":16.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Curity",
+    "internal_mm": 5.5,
+    "external_mm": 8.2,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Tracheal Tube, Oral\/Nasal, Soft-Seal, Murphy Eye",
-    "manufacturer":"Smiths Medical, Portex",
-    "internal_mm":5.5,
-    "external_mm":7.6,
-    "cuff_mm":17.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Curity",
+    "internal_mm": 6.0,
+    "external_mm": 8.9,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschFlex Armoured Tracheal Tube, Oral\/Nasal, with cuff, Murphy eye",
-    "manufacturer":"Teleflex",
-    "internal_mm":5.5,
-    "external_mm":7.8,
-    "cuff_mm":21.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Curity",
+    "internal_mm": 6.5,
+    "external_mm": 9.3,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Shiley Laser Oral Tracheal Tube Dual Cuffed",
-    "manufacturer":"Covidien",
-    "internal_mm":5.5,
-    "external_mm":7.9,
-    "cuff_mm":null,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Curity",
+    "internal_mm": 7.0,
+    "external_mm": 10.5,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschelit, Tracheal Tube (Oral Preformed, Murphy Eye, Cuffed)",
-    "manufacturer":"Teleflex",
-    "internal_mm":6.0,
-    "external_mm":8.0,
-    "cuff_mm":18.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Curity",
+    "internal_mm": 7.5,
+    "external_mm": 11.3,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Tracheal Tube, Oral\/Nasal, Soft-Seal, Murphy Eye",
-    "manufacturer":"Smiths Medical, Portex",
-    "internal_mm":6.0,
-    "external_mm":8.2,
-    "cuff_mm":23.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Curity",
+    "internal_mm": 8.0,
+    "external_mm": 11.4,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Shiley Microlaryngeal Oral\/Nasal Tracheal Tube Cuffed",
-    "manufacturer":"Covidien",
-    "internal_mm":6.0,
-    "external_mm":8.2,
-    "cuff_mm":27.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Curity",
+    "internal_mm": 8.5,
+    "external_mm": 12.1,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschFlex Armoured Tracheal Tube, Oral\/Nasal, with cuff, Murphy eye",
-    "manufacturer":"Teleflex",
-    "internal_mm":6.0,
-    "external_mm":8.4,
-    "cuff_mm":25.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Portex",
+    "internal_mm": 4.0,
+    "external_mm": 7.9,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschelit, Tracheal Tube (Oral Preformed, Murphy Eye, Cuffed)",
-    "manufacturer":"Teleflex",
-    "internal_mm":6.5,
-    "external_mm":8.7,
-    "cuff_mm":20.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Portex",
+    "internal_mm": 4.5,
+    "external_mm": 8.3,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Tracheal Tube, Oral\/Nasal, Soft-Seal, Murphy Eye",
-    "manufacturer":"Smiths Medical, Portex",
-    "internal_mm":6.5,
-    "external_mm":8.9,
-    "cuff_mm":23.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Portex",
+    "internal_mm": 5.0,
+    "external_mm": 8.2,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschFlex Armoured Tracheal Tube, Tracheal Tube (cuffed, Murphy eye)",
-    "manufacturer":"Teleflex",
-    "internal_mm":6.5,
-    "external_mm":9.0,
-    "cuff_mm":25.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Portex",
+    "internal_mm": 5.5,
+    "external_mm": 9.3,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschelit, Tracheal Tube (Oral Preformed, Murphy Eye, Cuffed)",
-    "manufacturer":"Teleflex",
-    "internal_mm":7.0,
-    "external_mm":9.3,
-    "cuff_mm":24.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Portex",
+    "internal_mm": 6.0,
+    "external_mm": 9.0,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Tracheal Tube, Oral\/Nasal, Soft-Seal, Murphy Eye",
-    "manufacturer":"Smiths Medical, Portex",
-    "internal_mm":7.0,
-    "external_mm":9.6,
-    "cuff_mm":30.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Portex",
+    "internal_mm": 6.5,
+    "external_mm": 10.0,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschFlex Armoured Tracheal Tube, Tracheal Tube (cuffed, Murphy eye)",
-    "manufacturer":"Teleflex",
-    "internal_mm":7.0,
-    "external_mm":9.6,
-    "cuff_mm":28.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Portex",
+    "internal_mm": 7.0,
+    "external_mm": 10.5,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Polar Preformed Tracheal Tube, North Nasal, Profile Soft-Seal, For Facio-Maxillary Surgery",
-    "manufacturer":"Smiths Medical, Portex",
-    "internal_mm":7.0,
-    "external_mm":10.2,
-    "cuff_mm":30.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Portex",
+    "internal_mm": 7.5,
+    "external_mm": 11.0,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschelit, Tracheal Tube (Oral Preformed, Murphy Eye, Cuffed)",
-    "manufacturer":"Teleflex",
-    "internal_mm":7.5,
-    "external_mm":10.0,
-    "cuff_mm":26.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Portex",
+    "internal_mm": 8.0,
+    "external_mm": 11.4,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschFlex Armoured Tracheal Tube, Tracheal Tube (cuffed, Murphy eye)",
-    "manufacturer":"Teleflex",
-    "internal_mm":7.5,
-    "external_mm":10.2,
-    "cuff_mm":28.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Portex",
+    "internal_mm": 8.5,
+    "external_mm": 12.5,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Tracheal Tube, Oral\/Nasal, Soft-Seal, Murphy Eye",
-    "manufacturer":"Smiths Medical, Portex",
-    "internal_mm":7.5,
-    "external_mm":10.3,
-    "cuff_mm":30.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Unomedical",
+    "internal_mm": 3.0,
+    "external_mm": 5.1,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Portex Profile Soft-Seal Cuff, Tracheal Tube Oral\/Nasal Murphy Eye",
-    "manufacturer":"Smiths Medical, Portex",
-    "internal_mm":7.5,
-    "external_mm":10.3,
-    "cuff_mm":30.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Unomedical",
+    "internal_mm": 3.5,
+    "external_mm": 6.0,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"GenFlex Endotracheal Tube, Tracheal Tube",
-    "manufacturer":"GenX MediCare",
-    "internal_mm":7.5,
-    "external_mm":10.9,
-    "cuff_mm":null,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Unomedical",
+    "internal_mm": 4.0,
+    "external_mm": 6.1,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschelit, Tracheal Tube (Oral Preformed, Murphy Eye, Cuffed)",
-    "manufacturer":"Teleflex",
-    "internal_mm":8.0,
-    "external_mm":10.7,
-    "cuff_mm":26.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Unomedical",
+    "internal_mm": 4.5,
+    "external_mm": 6.9,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschFlex Armoured Tracheal Tube, Tracheal Tube (cuffed, Murphy eye)",
-    "manufacturer":"Teleflex",
-    "internal_mm":8.0,
-    "external_mm":10.8,
-    "cuff_mm":31.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Unomedical",
+    "internal_mm": 5.0,
+    "external_mm": 7.7,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Portex Profile Soft-Seal Cuff, Tracheal Tube Oral\/Nasal Murphy Eye",
-    "manufacturer":"Smiths Medical, Portex",
-    "internal_mm":8.0,
-    "external_mm":10.9,
-    "cuff_mm":30.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Unomedical",
+    "internal_mm": 5.5,
+    "external_mm": 8.9,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschFlex Armoured Tracheal Tube, Tracheal Tube (cuffed, Murphy eye)",
-    "manufacturer":"Teleflex",
-    "internal_mm":8.5,
-    "external_mm":11.3,
-    "cuff_mm":31.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Unomedical",
+    "internal_mm": 6.0,
+    "external_mm": 9.0,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschelit, Tracheal Tube (Oral Preformed, Murphy Eye, Cuffed)",
-    "manufacturer":"Teleflex",
-    "internal_mm":8.5,
-    "external_mm":11.3,
-    "cuff_mm":28.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Unomedical",
+    "internal_mm": 6.5,
+    "external_mm": 10.1,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Portex Profile Soft-Seal Cuff, Tracheal Tube Oral\/Nasal Murphy Eye",
-    "manufacturer":"Smiths Medical, Portex",
-    "internal_mm":8.5,
-    "external_mm":11.6,
-    "cuff_mm":30.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Unomedical",
+    "internal_mm": 7.0,
+    "external_mm": 10.9,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschFlex Armoured Tracheal Tube, Tracheal Tube (cuffed, Murphy eye)",
-    "manufacturer":"Teleflex",
-    "internal_mm":9.0,
-    "external_mm":11.9,
-    "cuff_mm":35.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Unomedical",
+    "internal_mm": 7.5,
+    "external_mm": 11.7,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"Tracheal Tube, Oral\/Nasal, Super Safety Clear, Cuffed",
-    "manufacturer":"Teleflex",
-    "internal_mm":9.0,
-    "external_mm":12.0,
-    "cuff_mm":28.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Unomedical",
+    "internal_mm": 8.0,
+    "external_mm": 12.2,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name":"R\u00fcschelit Super Safety Clear, Tracheal tube, oral\/nasal, cuffed",
-    "manufacturer":"Teleflex",
-    "internal_mm":9.0,
-    "external_mm":12.0,
-    "cuff_mm":28.0,
-    "notes":null
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Unomedical",
+    "internal_mm": 8.5,
+    "external_mm": 12.8,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Fornia",
+    "internal_mm": 3.0,
+    "external_mm": 5.2,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Fornia",
+    "internal_mm": 3.5,
+    "external_mm": 5.5,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Fornia",
+    "internal_mm": 4.0,
+    "external_mm": 6.1,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Fornia",
+    "internal_mm": 4.5,
+    "external_mm": 7.1,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Fornia",
+    "internal_mm": 5.0,
+    "external_mm": 7.6,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Fornia",
+    "internal_mm": 5.5,
+    "external_mm": 8.4,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Fornia",
+    "internal_mm": 6.0,
+    "external_mm": 9.4,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Fornia",
+    "internal_mm": 7.0,
+    "external_mm": 10.4,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Fornia",
+    "internal_mm": 7.5,
+    "external_mm": 11.3,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Fornia",
+    "internal_mm": 8.0,
+    "external_mm": 12.0,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Fornia",
+    "internal_mm": 8.5,
+    "external_mm": 12.9,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Microcuff",
+    "internal_mm": 3.0,
+    "external_mm": 4.4,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Microcuff",
+    "internal_mm": 3.5,
+    "external_mm": 5.2,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Microcuff",
+    "internal_mm": 4.0,
+    "external_mm": 5.7,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Microcuff",
+    "internal_mm": 4.5,
+    "external_mm": 6.6,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Microcuff",
+    "internal_mm": 5.0,
+    "external_mm": 6.8,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Microcuff",
+    "internal_mm": 5.5,
+    "external_mm": 7.4,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Microcuff",
+    "internal_mm": 6.0,
+    "external_mm": 8.1,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Microcuff",
+    "internal_mm": 6.5,
+    "external_mm": 9.0,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Microcuff",
+    "internal_mm": 7.0,
+    "external_mm": 9.7,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Microcuff",
+    "internal_mm": 7.5,
+    "external_mm": 10.4,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Microcuff",
+    "internal_mm": 8.0,
+    "external_mm": 10.9,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
+  },
+  {
+    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
+    "manufacturer": "Microcuff",
+    "internal_mm": 8.5,
+    "external_mm": 12.0,
+    "cuff_mm": null,
+    "notes": "OD measured at deflated cuff (Table S7)"
   }
 ]
