@@ -220,10 +220,10 @@ const tableRows = computed(() => {
     <h1>Airway Compatibility — SAD → ETT</h1>
 
     <p class="disclaimer">
-      This app is intended for estimation only.
-      Data are based on information provided by manufacturers.
-      Always check device specifications and confirm compatibility.
-      Always check actual device fit before clinical use.
+      This app is intended to support estimation and should not replace clinical judgement.
+      Data are taken from published sources and manufacturer information.
+      External ETT diameter measurements are provided with the cuff in a deflated state.
+      Always review device specifications, confirm compatibility, and check the actual fit before clinical use.
     </p>
 
     <p v-if="loadError" class="error">{{ loadError }}</p>
@@ -325,7 +325,7 @@ h1 { font-size: 1.6rem; margin-bottom: 1rem; }
 
 .disclaimer {
   margin: 0.5rem 0 1.25rem;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   line-height: 1.4;
   color: #b71c1c;
   background: #fdecea;
