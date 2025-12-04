@@ -160,7 +160,7 @@ const mathsLine_E2S = computed(() => {
 
     <!-- Disclaimer -->
     <p class="disclaimer">
-      ⚠️ This app is intended for estimation only.
+      This app is intended for estimation only.
       Data are based on information provided by manufacturers.
       Always check device specifications and confirm compatibility.
       Always check actual device fit before clinical use.

@@ -10,6 +10,7 @@ const selectedSADBrandKey = ref(null); // "<canonName>|<canonManu>"
 const selectedSADSizeNum  = ref(null); // numeric size (e.g. 4)
 const MIN_TOLERANCE_MM = 0.5;
 const tolerance = ref(MIN_TOLERANCE_MM);
+const selectedETTNameKeys = ref([]);
 const loadError = ref(null);
 
 /* ---- Normalisation & parsing (dedupe brand names) ----
@@ -35,6 +36,13 @@ function displayName(str) {
 }
 function displayManu(str) {
   return String(str || "").trim();
+}
+function canonEttName(str) {
+  return String(str || "")
+    .replace(/[®™]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
 }
 /* Parse "Size 4, Adult…" => 4 */
 function parseSizeNumber(val) {
@@ -106,6 +114,22 @@ const sadSizeOptions = computed(() => {
   return Array.from(set).sort((a,b)=>a-b);
 });
 
+const ettNameOptions = computed(() => {
+  const map = new Map();
+  for (const e of etts.value) {
+    const key = canonEttName(e.name);
+    if (!key) continue;
+    if (!map.has(key)) {
+      map.set(key, {
+        key,
+        label: displayName(e.name),
+        manufacturer: displayManu(e.manufacturer),
+      });
+    }
+  }
+  return Array.from(map.values()).sort((a,b) => a.label.localeCompare(b.label));
+});
+
 /* Auto-pick largest size when brand changes (typical adult demo) */
 watch([selectedSADBrandKey, sadSizeOptions], () => {
   selectedSADSizeNum.value = sadSizeOptions.value.length ? sadSizeOptions.value.at(-1) : null;
@@ -115,6 +139,10 @@ watch([selectedSADBrandKey, sadSizeOptions], () => {
 watch(tolerance, (val) => {
   if (val < MIN_TOLERANCE_MM) tolerance.value = MIN_TOLERANCE_MM;
 });
+
+function showAllEttModels(checked) {
+  if (checked) selectedETTNameKeys.value = [];
+}
 /* Selected entry (brand + size) -> gives us ID for maths */
 const selectedSADEntry = computed(() => {
   if (!brandEntries.value.length || selectedSADSizeNum.value == null) return null;
@@ -133,56 +161,55 @@ function getType(e){ return (e.type && String(e.type).trim()) || "ETT"; }
 const tableRows = computed(() => {
   if (sadID.value == null) return [];
 
-  // collect candidates by type
-  const byType = new Map();
+  const activeSet = selectedETTNameKeys.value.length
+    ? new Set(selectedETTNameKeys.value)
+    : null;
+
+  const byName = new Map();
   for (const e of etts.value) {
+    const key = canonEttName(e.name);
+    if (!key) continue;
+    if (activeSet && !activeSet.has(key)) continue;
+
     const id = Number(e.internal_mm);
     const od = Number(e.external_mm);
     if (Number.isNaN(id) || Number.isNaN(od)) continue;
 
     const gap = sadID.value - od;
-    if (gap < 0) continue; // OD larger than SAD ID
+    if (gap < 0) continue;
 
-    const t = getType(e);
-    if (!byType.has(t)) byType.set(t, []);
-    byType.get(t).push({ id, od, gap, name: e.name, manufacturer: e.manufacturer || "" });
+    const entry = {
+      id,
+      od,
+      gap,
+      type: getType(e),
+      model: displayName(e.name),
+      manufacturer: displayManu(e.manufacturer || ""),
+    };
+    if (!byName.has(key)) byName.set(key, []);
+    byName.get(key).push(entry);
   }
 
   const rows = [];
-  for (const [t, list] of byType.entries()) {
+  for (const [key, list] of byName.entries()) {
     if (!list.length) continue;
-
-    // group by ETT ID (size) and pick best model (min OD) for that size
-    const bySize = new Map();
-    for (const x of list) {
-      if (!bySize.has(x.id)) bySize.set(x.id, []);
-      bySize.get(x.id).push(x);
-    }
-    const sizeBest = [];
-    for (const [id, items] of bySize.entries()) {
-      const best = items.slice().sort((a,b) => a.od - b.od)[0];
-      sizeBest.push(best);
-    }
-
-    // largest + second largest sizes
-    sizeBest.sort((a,b) => b.id - a.id || a.od - b.od);
-    const topTwo = sizeBest.slice(0,2);
-
-    for (const r of topTwo) {
+    list.sort((a,b) => b.id - a.id || a.od - b.od);
+    const topTwo = list.slice(0,2);
+    for (const item of topTwo) {
       rows.push({
-        id: r.id,
-        type: t,
-        od: r.od,
-        model: r.name,
-        manufacturer: r.manufacturer,
-        state: r.gap >= tolerance.value ? "fit" : "tight"
+        nameKey: key,
+        id: item.id,
+        type: item.type,
+        od: item.od,
+        model: item.model,
+        manufacturer: item.manufacturer,
+        state: item.gap >= tolerance.value ? "fit" : "tight"
       });
     }
   }
 
-  // order: type, then size desc, then OD asc
   return rows.sort(
-    (a,b) => (a.type||"").localeCompare(b.type||"") || b.id - a.id || a.od - b.od
+    (a,b) => a.model.localeCompare(b.model) || b.id - a.id || a.od - b.od
   );
 });
 </script>
@@ -235,26 +262,53 @@ const tableRows = computed(() => {
       <small>Green ≥ tolerance; Yellow &lt; tolerance (minimum 0.5 mm). Non-fitting ETTs are hidden.</small>
     </div>
 
+    <!-- ETT filter -->
+    <div class="field" v-if="selectedSADEntry">
+      <label>Filter ETT models</label>
+      <div class="tick-list">
+        <label class="tick">
+          <input
+            type="checkbox"
+            :checked="selectedETTNameKeys.length === 0"
+            @change="showAllEttModels($event.target.checked)"
+          >
+          Show all
+        </label>
+        <label
+          v-for="opt in ettNameOptions"
+          :key="opt.key"
+          class="tick"
+        >
+          <input
+            type="checkbox"
+            :value="opt.key"
+            v-model="selectedETTNameKeys"
+          >
+          {{ opt.label }}
+        </label>
+      </div>
+      <small>Tick models to narrow the list; leave blank for all models.</small>
+    </div>
+
     <!-- Results -->
     <table v-if="selectedSADEntry" class="results">
-      <caption>Largest compatible ETT sizes per type (top 2)</caption>
+      <caption>Largest compatible ETT sizes per selected model (top 2)</caption>
       <thead>
         <tr>
+          <th>ETT model</th>
           <th>ETT size (ID mm)</th>
           <th>Type</th>
           <th>External Diameter (OD mm)</th>
-          <th>Model / Manufacturer</th>
+          <th>Manufacturer</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in tableRows" :key="row.type + row.model + row.id + row.od" :class="row.state">
+        <tr v-for="row in tableRows" :key="row.nameKey + row.id + row.od + row.type" :class="row.state">
+          <td>{{ row.model }}</td>
           <td>{{ Number(row.id).toFixed(1) }}</td>
           <td>{{ row.type }}</td>
           <td>{{ row.od.toFixed(2) }}</td>
-          <td>
-            {{ row.model }}
-            <span v-if="row.manufacturer"> — {{ row.manufacturer }}</span>
-          </td>
+          <td>{{ row.manufacturer || "—" }}</td>
         </tr>
       </tbody>
     </table>
@@ -302,6 +356,24 @@ small { color: #666; }
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
   border: 1px solid #e3e3e3;
+}
+
+.tick-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.8rem;
+  padding: 0.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  max-height: 230px;
+  overflow-y: auto;
+  background: #fafafa;
+}
+.tick {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9rem;
 }
 
 .results {
