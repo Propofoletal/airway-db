@@ -1,467 +1,284 @@
 [
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "R\u00fcschelit",
+    "name": "Ruschelit Cuffed ETT",
     "internal_mm": 3.0,
-    "external_mm": 5.5,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 5.5
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "R\u00fcschelit",
+    "name": "Ruschelit Cuffed ETT",
     "internal_mm": 3.5,
-    "external_mm": 5.9,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 5.9
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "R\u00fcschelit",
+    "name": "Ruschelit Cuffed ETT",
     "internal_mm": 4.0,
-    "external_mm": 6.6,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 6.6
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "R\u00fcschelit",
+    "name": "Ruschelit Cuffed ETT",
     "internal_mm": 4.5,
-    "external_mm": 7.0,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 7.0
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "R\u00fcschelit",
+    "name": "Ruschelit Cuffed ETT",
     "internal_mm": 5.0,
-    "external_mm": 7.1,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 7.1
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "R\u00fcschelit",
+    "name": "Ruschelit Cuffed ETT",
     "internal_mm": 5.5,
-    "external_mm": 7.3,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 7.8
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "R\u00fcschelit",
+    "name": "Ruschelit Cuffed ETT",
     "internal_mm": 6.0,
-    "external_mm": 7.8,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 9.1
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "R\u00fcschelit",
+    "name": "Ruschelit Cuffed ETT",
     "internal_mm": 6.5,
-    "external_mm": 9.1,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 9.9
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "R\u00fcschelit",
+    "name": "Ruschelit Cuffed ETT",
     "internal_mm": 7.0,
-    "external_mm": 9.9,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 11.9
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "R\u00fcschelit",
+    "name": "Ruschelit Cuffed ETT",
     "internal_mm": 7.5,
-    "external_mm": 11.5,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 11.5
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "R\u00fcschelit",
+    "name": "Ruschelit Cuffed ETT",
     "internal_mm": 8.0,
-    "external_mm": 11.8,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 11.8
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "R\u00fcschelit",
+    "name": "Ruschelit Cuffed ETT",
     "internal_mm": 8.5,
-    "external_mm": 12.3,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 12.3
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Shiley",
+    "name": "Shiley Cuffed ETT",
     "internal_mm": 3.0,
-    "external_mm": 4.7,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 4.7
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Shiley",
+    "name": "Shiley Cuffed ETT",
     "internal_mm": 3.5,
-    "external_mm": 5.4,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 5.4
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Shiley",
+    "name": "Shiley Cuffed ETT",
     "internal_mm": 4.0,
-    "external_mm": 5.9,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 5.9
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Shiley",
+    "name": "Shiley Cuffed ETT",
     "internal_mm": 4.5,
-    "external_mm": 6.7,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 6.7
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Shiley",
+    "name": "Shiley Cuffed ETT",
     "internal_mm": 5.0,
-    "external_mm": 7.9,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 7.9
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Shiley",
+    "name": "Shiley Cuffed ETT",
     "internal_mm": 5.5,
-    "external_mm": 8.2,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 8.2
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Shiley",
+    "name": "Shiley Cuffed ETT",
     "internal_mm": 6.0,
-    "external_mm": 8.3,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 8.8
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Shiley",
+    "name": "Shiley Cuffed ETT",
     "internal_mm": 6.5,
-    "external_mm": 9.2,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 9.7
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Shiley",
+    "name": "Shiley Cuffed ETT",
     "internal_mm": 7.0,
-    "external_mm": 9.8,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 10.2
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Shiley",
+    "name": "Shiley Cuffed ETT",
     "internal_mm": 7.5,
-    "external_mm": 10.8,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 10.8
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Shiley",
+    "name": "Shiley Cuffed ETT",
     "internal_mm": 8.0,
-    "external_mm": 12.0,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 11.2
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Shiley",
+    "name": "Shiley Cuffed ETT",
     "internal_mm": 8.5,
-    "external_mm": 12.1,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 12.1
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Curity",
+    "name": "Curity Cuffed ETT",
     "internal_mm": 4.0,
-    "external_mm": 5.9,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 5.9
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Curity",
+    "name": "Curity Cuffed ETT",
     "internal_mm": 5.0,
-    "external_mm": 7.7,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 7.7
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Curity",
+    "name": "Curity Cuffed ETT",
     "internal_mm": 5.5,
-    "external_mm": 8.2,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 8.2
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Curity",
+    "name": "Curity Cuffed ETT",
     "internal_mm": 6.0,
-    "external_mm": 8.9,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 8.9
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Curity",
+    "name": "Curity Cuffed ETT",
     "internal_mm": 6.5,
-    "external_mm": 9.3,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 9.3
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Curity",
+    "name": "Curity Cuffed ETT",
     "internal_mm": 7.0,
-    "external_mm": 10.5,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 10.5
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Curity",
+    "name": "Curity Cuffed ETT",
     "internal_mm": 7.5,
-    "external_mm": 11.3,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 11.3
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Curity",
+    "name": "Curity Cuffed ETT",
     "internal_mm": 8.0,
-    "external_mm": 11.4,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 11.4
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Curity",
+    "name": "Curity Cuffed ETT",
     "internal_mm": 8.5,
-    "external_mm": 12.1,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 12.1
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Portex",
-    "internal_mm": 4.0,
-    "external_mm": 7.9,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
-  },
-  {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Portex",
-    "internal_mm": 4.5,
-    "external_mm": 8.3,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
-  },
-  {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Portex",
+    "name": "Portex Cuffed ETT",
     "internal_mm": 5.0,
-    "external_mm": 8.2,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 7.9
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Portex",
+    "name": "Portex Cuffed ETT",
     "internal_mm": 5.5,
-    "external_mm": 9.3,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 8.2
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Portex",
+    "name": "Portex Cuffed ETT",
     "internal_mm": 6.0,
-    "external_mm": 9.0,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 8.9
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Portex",
+    "name": "Portex Cuffed ETT",
     "internal_mm": 6.5,
-    "external_mm": 10.0,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 10.0
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Portex",
+    "name": "Portex Cuffed ETT",
     "internal_mm": 7.0,
-    "external_mm": 10.5,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 11.0
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Portex",
+    "name": "Portex Cuffed ETT",
     "internal_mm": 7.5,
-    "external_mm": 11.0,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 11.7
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Portex",
+    "name": "Portex Cuffed ETT",
     "internal_mm": 8.0,
-    "external_mm": 11.4,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 12.4
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Portex",
+    "name": "Portex Cuffed ETT",
     "internal_mm": 8.5,
-    "external_mm": 12.5,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 12.6
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Unomedical",
+    "name": "Unomedical Cuffed ETT",
     "internal_mm": 3.0,
-    "external_mm": 5.1,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 5.1
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Unomedical",
+    "name": "Unomedical Cuffed ETT",
     "internal_mm": 3.5,
-    "external_mm": 6.0,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 6.0
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Unomedical",
+    "name": "Unomedical Cuffed ETT",
     "internal_mm": 4.0,
-    "external_mm": 6.1,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 6.1
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Unomedical",
+    "name": "Unomedical Cuffed ETT",
     "internal_mm": 4.5,
-    "external_mm": 6.9,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 6.9
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Unomedical",
+    "name": "Unomedical Cuffed ETT",
     "internal_mm": 5.0,
-    "external_mm": 7.7,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 7.7
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Unomedical",
+    "name": "Unomedical Cuffed ETT",
     "internal_mm": 5.5,
-    "external_mm": 8.9,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 8.3
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Unomedical",
+    "name": "Unomedical Cuffed ETT",
     "internal_mm": 6.0,
-    "external_mm": 9.0,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 9.0
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Unomedical",
+    "name": "Unomedical Cuffed ETT",
     "internal_mm": 6.5,
-    "external_mm": 10.1,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 10.1
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Unomedical",
+    "name": "Unomedical Cuffed ETT",
     "internal_mm": 7.0,
-    "external_mm": 10.9,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 10.9
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Unomedical",
+    "name": "Unomedical Cuffed ETT",
     "internal_mm": 7.5,
-    "external_mm": 11.7,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 11.7
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Unomedical",
+    "name": "Unomedical Cuffed ETT",
     "internal_mm": 8.0,
-    "external_mm": 12.2,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 12.2
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Unomedical",
+    "name": "Unomedical Cuffed ETT",
     "internal_mm": 8.5,
-    "external_mm": 12.8,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 12.8
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Fornia",
+    "name": "Fornia Cuffed ETT",
     "internal_mm": 3.0,
-    "external_mm": 5.2,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 5.2
+
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Fornia",
+    "name": "Fornia Cuffed ETT",
     "internal_mm": 3.5,
-    "external_mm": 5.5,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 5.5
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Fornia",
+    "name": "Fornia Cuffed ETT",
     "internal_mm": 4.0,
-    "external_mm": 6.1,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 6.1
   },
   {
     "name": "Tracheal Tube, Oral/Nasal, Cuffed",
@@ -472,155 +289,73 @@
     "notes": "OD measured at deflated cuff (Table S7)"
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Fornia",
+    "name": "Fornia Cuffed ETT",
     "internal_mm": 5.0,
-    "external_mm": 7.6,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 7.6
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Fornia",
+    "name": "Fornia Cuffed ETT",
     "internal_mm": 5.5,
-    "external_mm": 8.4,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 8.4
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Fornia",
-    "internal_mm": 6.0,
-    "external_mm": 9.4,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
-  },
-  {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Fornia",
+    "name": "Fornia Cuffed ETT",
     "internal_mm": 7.0,
-    "external_mm": 10.4,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 10.4
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Fornia",
+    "name": "Fornia Cuffed ETT",
     "internal_mm": 7.5,
-    "external_mm": 11.3,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 11.3
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Fornia",
+    "name": "Fornia Cuffed ETT",
     "internal_mm": 8.0,
-    "external_mm": 12.0,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 12.2
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Fornia",
-    "internal_mm": 8.5,
-    "external_mm": 12.9,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
-  },
-  {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Microcuff",
+    "name": "Microcuff Cuffed ETT",
     "internal_mm": 3.0,
-    "external_mm": 4.4,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 4.4
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Microcuff",
+    "name": "Microcuff Cuffed ETT",
     "internal_mm": 3.5,
-    "external_mm": 5.2,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 5.2
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Microcuff",
+    "name": "Microcuff Cuffed ETT",
     "internal_mm": 4.0,
-    "external_mm": 5.7,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 5.7
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Microcuff",
+    "name": "Microcuff Cuffed ETT",
     "internal_mm": 4.5,
-    "external_mm": 6.6,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 6.6
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Microcuff",
+    "name": "Microcuff Cuffed ETT",
     "internal_mm": 5.0,
-    "external_mm": 6.8,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 6.8
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Microcuff",
+    "name": "Microcuff Cuffed ETT",
     "internal_mm": 5.5,
-    "external_mm": 7.4,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 7.4
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Microcuff",
+    "name": "Microcuff Cuffed ETT",
     "internal_mm": 6.0,
-    "external_mm": 8.1,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 8.1
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Microcuff",
-    "internal_mm": 6.5,
-    "external_mm": 9.0,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
-  },
-  {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Microcuff",
+    "name": "Microcuff Cuffed ETT",
     "internal_mm": 7.0,
-    "external_mm": 9.7,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 9.7
   },
   {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Microcuff",
+    "name": "Microcuff Cuffed ETT",
     "internal_mm": 7.5,
-    "external_mm": 10.4,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
-  },
-  {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Microcuff",
-    "internal_mm": 8.0,
-    "external_mm": 10.9,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
-  },
-  {
-    "name": "Tracheal Tube, Oral/Nasal, Cuffed",
-    "manufacturer": "Microcuff",
-    "internal_mm": 8.5,
-    "external_mm": 12.0,
-    "cuff_mm": null,
-    "notes": "OD measured at deflated cuff (Table S7)"
+    "external_mm": 10.4
   }
 ]
