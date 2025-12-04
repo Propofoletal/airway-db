@@ -177,7 +177,8 @@ const tableRows = computed(() => {
     if (Number.isNaN(id) || Number.isNaN(od)) continue;
 
     const gap = sadID.value - od;
-    if (gap < 0) continue;
+    // Skip models that do not meet the current clearance requirement.
+    if (gap < tolerance.value) continue;
 
     const entry = {
       id,
@@ -197,6 +198,7 @@ const tableRows = computed(() => {
     list.sort((a,b) => b.id - a.id || a.od - b.od);
     const topTwo = list.slice(0,2);
     for (const item of topTwo) {
+      const isComfortable = item.gap >= tolerance.value + 0.25; // slightly above tolerance gets a green badge
       rows.push({
         nameKey: key,
         id: item.id,
@@ -204,7 +206,7 @@ const tableRows = computed(() => {
         od: item.od,
         model: item.model,
         manufacturer: item.manufacturer,
-        state: item.gap >= tolerance.value ? "fit" : "tight"
+        state: isComfortable ? "fit" : "tight"
       });
     }
   }
@@ -267,7 +269,7 @@ const tableRows = computed(() => {
     <div class="field" v-if="selectedSADEntry">
       <label>Tolerance / clearance (mm): {{ tolerance.toFixed(2) }}</label>
       <input type="range" :min="MIN_TOLERANCE_MM" max="2" step="0.1" v-model.number="tolerance" />
-      <small>Green ≥ tolerance; Yellow &lt; tolerance (minimum 0.5 mm). Non-fitting ETTs are hidden.</small>
+      <small>Results must meet the tolerance. Green = comfortable (≥ tolerance + 0.25 mm); Yellow = just meets tolerance.</small>
     </div>
 
     <!-- ETT filter -->
