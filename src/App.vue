@@ -217,13 +217,20 @@ const tableRows = computed(() => {
 
 <template>
   <main class="container">
-    <h1>Airway Compatibility — SAD → ETT</h1>
+    <h1>Plan B Airway Compatibility Tool</h1>
 
     <p class="disclaimer">
       This app is intended to support estimation and should not replace clinical judgement.
       Data are taken from published sources and manufacturer information.
       External ETT diameter measurements are provided with the cuff in a deflated state.
       Always review device specifications, confirm compatibility, and check the actual fit before clinical use.
+    </p>
+
+      <p class="howto">
+      1. Select the SAD model/brand and size you plan to use;<br>
+      2. Adjust the tolerance slider to set your minimum acceptable clearance between SAD and ETT;<br>
+      3. Filter ETT models to narrow the results;<br>
+      4. Review the largest compatible ETT sizes per model (highlighted in green/yellow).
     </p>
 
     <p v-if="loadError" class="error">{{ loadError }}</p>
@@ -319,6 +326,11 @@ const tableRows = computed(() => {
 </template>
 
 <style>
+body {
+  background: #fff !important;
+  color: #111;
+  color-scheme: light;
+}
 :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
 .container { max-width: 950px; margin: 2rem auto; padding: 1rem; }
 h1 { font-size: 1.6rem; margin-bottom: 1rem; }
@@ -330,6 +342,16 @@ h1 { font-size: 1.6rem; margin-bottom: 1rem; }
   color: #b71c1c;
   background: #fdecea;
   border-left: 4px solid #e74c3c;
+  padding: 0.6rem 0.9rem;
+  border-radius: 4px;
+}
+.howto {
+  margin: 0.5rem 0 1.25rem;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  color: #000000;
+  background: #c8cdee;
+  border-left: 4px solid #0c095d;
   padding: 0.6rem 0.9rem;
   border-radius: 4px;
 }
