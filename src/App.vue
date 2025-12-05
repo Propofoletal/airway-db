@@ -425,7 +425,7 @@ h1 { font-size: 1.6rem; margin-bottom: 1rem; }
 select {
   width: 100%;
   padding: 0.45rem;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
 }
 select:disabled { background: #f5f5f5; color: #888; cursor: not-allowed; }
 small { color: #666; }
