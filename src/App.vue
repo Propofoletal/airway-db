@@ -239,7 +239,7 @@ const tableRows = computed(() => {
 
     <!-- 1) SAD model/brand -->
     <div class="field">
-      <label>Select SAD Model / Brand</label>
+      <label>1.Select SAD Model / Brand</label>
       <select v-model="selectedSADBrandKey">
         <option :value="null">— select model/brand —</option>
         <option v-for="b in sadBrands" :key="b.key" :value="b.key">
@@ -250,7 +250,7 @@ const tableRows = computed(() => {
 
     <!-- 2) SAD size (numbers only) -->
     <div class="field">
-      <label>Select SAD Size</label>
+      <label>2.Select SAD Size</label>
       <select v-model="selectedSADSizeNum" :disabled="!selectedSADBrandKey">
         <option :value="null">— select size —</option>
         <option v-for="sz in sadSizeOptions" :key="sz" :value="sz">Size {{ sz }}</option>
@@ -274,7 +274,7 @@ const tableRows = computed(() => {
 
     <!-- ETT filter -->
     <div class="field" v-if="selectedSADEntry">
-      <label>Filter ETT models</label>
+      <label>3.Filter ETT models</label>
       <div class="tick-list">
         <label class="tick">
           <input
@@ -368,7 +368,7 @@ h1 { font-size: 1.6rem; margin-bottom: 1rem; }
 }
 
 .field { margin-bottom: 1rem; }
-.field label { display: block; font-weight: 600; margin-bottom: 0.4rem; }
+.field label { display: block; font-weight: 700; margin-bottom: 0.4rem; }
 select { width: 100%; padding: 0.45rem; }
 select:disabled { background: #f5f5f5; color: #888; cursor: not-allowed; }
 small { color: #666; }
