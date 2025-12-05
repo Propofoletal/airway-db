@@ -144,6 +144,11 @@ watch(tolerance, (val) => {
 function showAllEttModels(checked) {
   if (checked) selectedETTNameKeys.value = [];
 }
+
+function scrollToStep(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 /* Selected entry (brand + size) -> gives us ID for maths */
 const selectedSADEntry = computed(() => {
   if (!brandEntries.value.length || selectedSADSizeNum.value == null) return null;
@@ -228,17 +233,34 @@ const tableRows = computed(() => {
       Always review device specifications, confirm compatibility, and check the actual fit before clinical use.
     </p>
 
-      <p class="howto">
-      1. Select the SAD model/brand and size you plan to use;<br>
-      2. Adjust the tolerance slider to set your minimum acceptable clearance between SAD and ETT;<br>
-      3. Filter ETT models to narrow the results;<br>
-      4. Review the largest compatible ETT sizes per model (highlighted in green/yellow).
-    </p>
+    <div class="steps" aria-label="Steps to use the tool">
+      <button class="step-card" type="button" @click="scrollToStep('step-brand')">
+        <div class="step-badge">1</div>
+        <div>
+          <div class="step-title">Select SAD Model / Brand</div>
+          <div class="step-sub">Pick the device to load available sizes</div>
+        </div>
+      </button>
+      <button class="step-card" type="button" @click="scrollToStep('step-size')">
+        <div class="step-badge">2</div>
+        <div>
+          <div class="step-title">Select SAD Size</div>
+          <div class="step-sub">Choose the size you plan to use</div>
+        </div>
+      </button>
+      <button class="step-card" type="button" @click="scrollToStep('step-filter')">
+        <div class="step-badge">3</div>
+        <div>
+          <div class="step-title">Filter ETT Models</div>
+          <div class="step-sub">Show all or narrow to specific tubes</div>
+        </div>
+      </button>
+    </div>
 
     <p v-if="loadError" class="error">{{ loadError }}</p>
 
     <!-- 1) SAD model/brand -->
-    <div class="field">
+    <div class="field" id="step-brand">
       <label>1.Select SAD Model / Brand</label>
       <select v-model="selectedSADBrandKey">
         <option :value="null">— select model/brand —</option>
@@ -249,7 +271,7 @@ const tableRows = computed(() => {
     </div>
 
     <!-- 2) SAD size (numbers only) -->
-    <div class="field">
+    <div class="field" id="step-size">
       <label>2.Select SAD Size</label>
       <select v-model="selectedSADSizeNum" :disabled="!selectedSADBrandKey">
         <option :value="null">— select size —</option>
@@ -273,7 +295,7 @@ const tableRows = computed(() => {
     </div>
 
     <!-- ETT filter -->
-    <div class="field" v-if="selectedSADEntry">
+    <div class="field" v-if="selectedSADEntry" id="step-filter">
       <label>3.Filter ETT models</label>
       <div class="tick-list">
         <label class="tick">
@@ -347,16 +369,47 @@ h1 { font-size: 1.6rem; margin-bottom: 1rem; }
   padding: 0.6rem 0.9rem;
   border-radius: 4px;
 }
-.howto {
-  margin: 0.5rem 0 1.25rem;
-  font-size: 1.2rem;
-  line-height: 1.4;
-  color: #000000;
-  background: #c8cdee;
-  border-left: 4px solid #0c095d;
-  padding: 0.6rem 0.9rem;
-  border-radius: 4px;
+
+.steps {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  margin: 0.6rem 0 1.25rem;
 }
+.step-card {
+  border: 1px solid #d3c7b8;
+  background: #f6f1e8;
+  border-radius: 12px;
+  padding: 12px 14px 14px 14px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: center;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  text-align: left;
+}
+.step-card:hover {
+  border-color: #0c6d65;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+.step-card:focus-visible {
+  outline: 2px solid #0c6d65;
+  outline-offset: 2px;
+}
+.step-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #0c6d65;
+  color: #fff;
+  font-weight: 700;
+}
+.step-title { font-weight: 700; }
+.step-sub { color: #3c3a36; font-size: 13px; }
 
 .error {
   margin: 0.75rem 0;
